@@ -100,6 +100,19 @@ python scripts/make_fefco_dieline.py
 | 使用说明 | `docs/usage.md` |
 | 开发日志与日程记录 | `logs/dev_log.md`、`logs/schedule.md` |
 
+## 工具脚本一览
+
+| 脚本 | 职责 |
+|---|---|
+| `scripts/run_all.py` | 一键复现全部（19 步：冒烟→素材→4 建模→4 blend→4 渲染→2 尺寸审计→修改引擎自检） |
+| `scripts/nl_to_3d.py` | 自然语言 → 结构化 JSON → 调 Blender（演示管线） |
+| `scripts/nl_modify_script.py` | 一句话 → **修改建模脚本**（生成修改版副本 + diff）→ 运行 |
+| `scripts/audit_dimensions.py` | **尺寸来源审计**：逐条标注 图纸/一句话/AI默认 |
+| `scripts/blender_utils.py` | 公共工具（find_blender 等，避免重复代码） |
+| `scripts/build_*.py` | 参数化建模（壳体/液压缸/包装盒/浮雕），单位 mm |
+| `scripts/render_glb.py` | 从 GLB 自动取景渲染多视角图 |
+| `scripts/make_blend_view.py` | GLB → 可 Blender 打开的 .blend |
+| `scripts/make_fefco_dieline.py` / `make_relief_maps.py` | 素材预处理 |
 ## 技术路线要点
 
 - 几何走**参数化模板/脚本**（回转体、盒体），LLM 一句话 + 迭代修改即可重建；

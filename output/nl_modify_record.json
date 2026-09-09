@@ -1,0 +1,15 @@
+{
+  "text": "液压缸 缸筒外径90",
+  "object": "hydraulic (build_hydraulic.py)",
+  "changes": {
+    "BARREL_R": 45.0
+  },
+  "notes": [
+    "缸筒外径 90mm -> BARREL_R=45.0(半径)"
+  ],
+  "modified_script": "C:\\Users\\Lenovo\\Documents\\ChatGPT\\社团考题4\\output\\nl_scripts\\build_hydraulic_nl.py",
+  "diff": [
+    "- BARREL_R = 40.0",
+    "+ BARREL_R = 45.0"
+  ]
+}

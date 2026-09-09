@@ -96,3 +96,17 @@ python scripts/nl_to_3d.py --text "壳体" --demo-only
 ```
 - 离线解析器（PARSER=demo）用于可复现演示；真实理解由 LLM 完成（实录见 docs/nl_driven_workflow.md）；
 - 每步输出结构化 JSON（含 dimension_source 尺寸来源标注）到 output/nl_<项目>.json，并自动调用 Blender 建模+渲染。
+
+## J. 尺寸来源审计 与 脚本修改引擎
+```powershell
+# 逐条查看模型每个尺寸的来源(图纸/一句话/AI默认)
+python scripts/audit_dimensions.py --project hydraulic
+python scripts/audit_dimensions.py --project hydraulic --md   # 输出 Markdown 报告
+python scripts/audit_dimensions.py --project housing
+
+# 一句话 → 自动修改建模脚本(生成修改版副本+diff) → 运行 Blender
+python scripts/nl_modify_script.py --text "液压缸 缸筒外径100 法兰直径130 活塞杆直径36" --blender <路径>
+python scripts/nl_modify_script.py --text "液压缸 缸筒外径90" --dry-run   # 只看修改与 diff
+```
+- 尺寸来源规则：from_drawing=图纸自动读取(当前恒空，未集成OCR)；from_nl=这句话覆盖；ai_default=AI典型默认(需核对图纸)。
+- 修改引擎生成 `output/nl_scripts/build_hydraulic_nl.py` 副本，原脚本不被改写；记录在 `output/nl_modify_record.json`。

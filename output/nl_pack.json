@@ -1,11 +1,11 @@
 {
-  "text": "做一个包装盒 200x120x80 mm",
+  "text": "做一个包装盒 180x45x45mm",
   "parser": "demo",
   "project": "pack",
   "params_mm": {
-    "width_mm": 200.0,
-    "depth_mm": 120.0,
-    "height_mm": 80.0
+    "width_mm": 180.0,
+    "depth_mm": 45.0,
+    "height_mm": 45.0
   },
   "dimension_source": {
     "from_drawing": [],

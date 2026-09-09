@@ -11,7 +11,6 @@ import os
 import sys
 
 import bpy
-from mathutils import Vector
 
 MM = 0.001
 
@@ -21,8 +20,6 @@ def parse_args():
     argv = argv[argv.index("--") + 1:] if "--" in argv else []
     p = argparse.ArgumentParser()
     p.add_argument("--out", required=True)
-    p.add_argument("--engine", default="auto", choices=["auto", "EEVEE", "CYCLES"])
-    p.add_argument("--samples", type=int, default=64)
     return p.parse_args(argv)
 
 
@@ -60,47 +57,6 @@ def apply_bool(target, other, op):
             bpy.data.objects.remove(other, do_unlink=True)
 
 
-def resolve_engine(name):
-    if bpy.app.version >= (5, 0, 0):
-        return "CYCLES" if name == "CYCLES" else "BLENDER_EEVEE"
-    if bpy.app.version >= (4, 2, 0):
-        return "CYCLES" if name == "CYCLES" else "BLENDER_EEVEE_NEXT"
-    return "CYCLES" if name == "CYCLES" else "BLENDER_EEVEE"
-
-
-def setup_scene(radius_max, height):
-    scene = bpy.context.scene
-    center = Vector((0, 0, height / 2 * MM))
-    dist = radius_max * 2 * MM * 2.6
-
-    cam = bpy.data.objects.new("Cam", bpy.data.cameras.new("Cam"))
-    scene.collection.objects.link(cam)
-    scene.camera = cam
-
-    key = bpy.data.objects.new("Key", bpy.data.lights.new("Key", type="AREA"))
-    key.data.energy, key.data.size = 120.0, 1.5
-    scene.collection.objects.link(key)
-    key.location = Vector((dist, -dist * 0.8, dist * 1.6))
-
-    fill = bpy.data.objects.new("Fill", bpy.data.lights.new("Fill", type="AREA"))
-    fill.data.energy, fill.data.size = 30.0, 3.0
-    scene.collection.objects.link(fill)
-    fill.location = Vector((0, 0, dist * 2.2))
-
-    world = bpy.data.worlds.new("Studio")
-    scene.world = world
-    world.use_nodes = True
-    world.node_tree.nodes["Background"].inputs[0].default_value = (0.03, 0.03, 0.04, 1)
-
-    bpy.ops.mesh.primitive_plane_add(size=dist * 8, location=(0, 0, 0))
-    ground = bpy.context.object
-    gm = bpy.data.materials.new("mat_ground")
-    gm.use_nodes = True
-    gm.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value = (0.85, 0.85, 0.87, 1)
-    ground.data.materials.append(gm)
-    return cam, center
-
-
 def make_material(obj, color=(0.72, 0.74, 0.78, 1), metal=0.75, rough=0.35):
     mat = bpy.data.materials.new("mat_housing")
     mat.use_nodes = True
@@ -112,12 +68,6 @@ def make_material(obj, color=(0.72, 0.74, 0.78, 1), metal=0.75, rough=0.35):
         obj.data.materials[0] = mat
     else:
         obj.data.materials.append(mat)
-
-
-def place_camera(cam, center, dist, direction):
-    d = Vector(direction).normalized()
-    cam.location = center + d * dist
-    cam.rotation_euler = (center - cam.location).to_track_quat("-Z", "Y").to_euler()
 
 
 def main():
@@ -145,7 +95,6 @@ def main():
         apply_bool(housing, m, "DIFFERENCE")
 
     make_material(housing)
-    cam, center = setup_scene(55, 66)
 
     try:
         bpy.ops.preferences.addon_enable(module="io_scene_gltf2")

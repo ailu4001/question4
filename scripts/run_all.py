@@ -9,43 +9,16 @@
 前置：Python 需安装 Pillow、numpy（预处理用）；Blender 3.6+。
 """
 import argparse
-import glob
 import os
 import shutil
 import subprocess
 import sys
 import time
 
+from blender_utils import find_blender
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LOG_DIR = os.path.join(ROOT, 'logs')
-
-
-def find_blender():
-    exe = os.environ.get('BLENDER_EXE')
-    if exe and os.path.exists(exe):
-        return exe
-    w = shutil.which('blender')
-    if w:
-        return w
-    cands = []
-    bases = [r'C:\Program Files\Blender Foundation',
-             r'C:\Program Files (x86)\Blender Foundation',
-             os.path.expandvars(r'%LOCALAPPDATA%\Programs\Blender Foundation')]
-    for base in bases:
-        if os.path.isdir(base):
-            for d in glob.glob(os.path.join(base, 'Blender*')):
-                p = os.path.join(d, 'blender.exe')
-                if os.path.exists(p):
-                    name = os.path.basename(d).lower()
-                    try:
-                        ver = tuple(int(x) for x in name.split('blender')[1].strip().split('.'))
-                    except Exception:
-                        ver = (0,)
-                    cands.append((ver, p))
-    if cands:
-        cands.sort(key=lambda x: x[0])
-        return cands[-1][1]
-    return None
 
 
 def _python_ok(exe):
@@ -146,6 +119,13 @@ def main():
                                          '--glb', os.path.join('output', glb + '.glb'),
                                          '--out', os.path.join('output', tag),
                                          '--res', '1600')))
+
+    # 自检步骤（新工具：尺寸来源审计 + 脚本修改引擎，无需 Blender）
+    steps += [
+        ('audit_dimensions_hydraulic', p(S + '/audit_dimensions.py', '--project', 'hydraulic', '--md')),
+        ('audit_dimensions_housing', p(S + '/audit_dimensions.py', '--project', 'housing')),
+        ('nl_modify_selftest', p(S + '/nl_modify_script.py', '--text', '液压缸 缸筒外径90', '--dry-run')),
+    ]
 
     fails = []
     for name, cmd in steps:

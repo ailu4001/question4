@@ -12,13 +12,13 @@
 - 输出 JSON 含 dimension_source 标注：from_drawing / from_nl / ai_default。
 """
 import argparse
-import glob
 import json
 import os
 import re
-import shutil
 import subprocess
 import sys
+
+from blender_utils import find_blender
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PARSER = "demo"  # demo=离线规则；接入真实 LLM 时替换 parse_nl() 即可
@@ -28,32 +28,6 @@ if hasattr(sys.stdout, "reconfigure"):
     sys.stderr.reconfigure(encoding="utf-8", errors="replace")
 
 NUM = r"(\d+(?:\.\d+)?)\s*(?:mm|毫米|厘米|cm)?"
-
-
-def find_blender():
-    exe = os.environ.get("BLENDER_EXE")
-    if exe and os.path.exists(exe):
-        return exe
-    w = shutil.which("blender")
-    if w:
-        return w
-    cands = []
-    for base in [r"C:\Program Files\Blender Foundation",
-                 r"C:\Program Files (x86)\Blender Foundation",
-                 os.path.expandvars(r"%LOCALAPPDATA%\Programs\Blender Foundation")]:
-        if os.path.isdir(base):
-            for d in glob.glob(os.path.join(base, "Blender*")):
-                p = os.path.join(d, "blender.exe")
-                if os.path.exists(p):
-                    try:
-                        ver = tuple(int(x) for x in os.path.basename(d).split()[1].split("."))
-                    except Exception:
-                        ver = (0,)
-                    cands.append((ver, p))
-    if cands:
-        cands.sort(key=lambda x: x[0])
-        return cands[-1][1]
-    return None
 
 
 def parse_nl(text):

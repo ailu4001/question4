@@ -13,7 +13,7 @@ import sys
 import bpy
 
 MM = 0.001
-BARREL_R = 40.0
+BARREL_R = 45.0
 BARREL_Z0, BARREL_Z1 = -130.0, 130.0
 CAP_R = 55.0
 CAP_B_Z0, CAP_B_Z1 = -150.0, -130.0
