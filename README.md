@@ -49,7 +49,7 @@ python scripts/make_fefco_dieline.py
 |---|---|
 | 二维输入素材 | `assets/`（CAD 图纸、包装正面图、人物图、工业刀版图） |
 | Blender 脚本 | `scripts/`（build_housing / build_pack / person_relief 等） |
-| 模型或渲染成果 | `output/`（.blend / .glb / 多视角 PNG / 预览页） |
+| 模型或渲染成果 | `output/`（.blend / .glb / 多视角 PNG） |
 | 实验截图 | `output/*.png`（渲染即实验截图） |
 | 简单分析报告 | `docs/analysis.md` |
 | 使用说明 | `docs/usage.md` |
@@ -60,4 +60,4 @@ python scripts/make_fefco_dieline.py
 - 几何走**参数化模板/脚本**（回转体、盒体），LLM 一句话 + 迭代修改即可重建；
 - 贴图用**分面映射**（包装盒）或**最近背景样本抠图 + 高度图**（人物浮雕）；
 - 全部**无头(headless)可复现**，脚本化、Git 可追溯；
-- 3D 查看：浏览器预览页（three.js，需 WebGL）或 **Blender 直接打开 .blend**（最可靠）。
+- 3D 查看：**用 Blender 直接打开 `output/*_view.blend`**（最可靠）。浏览器 three.js 预览需 WebGL，在受限浏览器中不可用，故仓库不附带预览页。

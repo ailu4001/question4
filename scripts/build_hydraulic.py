@@ -170,26 +170,13 @@ def main():
     scene.camera = cam
     setup(cam, center, radius)
 
-    os.makedirs(os.path.dirname(os.path.abspath(args.out)), exist_ok=True)
-    scene.render.engine = resolve_engine(args.engine)
-    scene.render.resolution_x = 1600
-    scene.render.resolution_y = 1200
-    scene.render.image_settings.file_format = "PNG"
-    dist = radius * 2.6
-    views = [("front", (0.0, 1.0, 0.45)), ("quarter", (1.0, 1.0, 0.7)), ("top", (0.5, 0.9, 1.7))]
-    for vname, vdir in views:
-        place_camera(cam, center, dist, vdir)
-        scene.render.filepath = args.out + "_" + vname + ".png"
-        bpy.ops.render.render(write_still=True)
-        print("[OK] rendered ->", args.out + "_" + vname + ".png")
-
     try:
         bpy.ops.preferences.addon_enable(module="io_scene_gltf2")
     except Exception:
         pass
     bpy.ops.object.select_all(action="DESELECT")
     for o in bpy.context.scene.objects:
-        if o.type == "MESH":
+        if o.type == "MESH" and o.name.lower() not in ("plane", "ground"):
             o.select_set(True)
     try:
         bpy.ops.export_scene.gltf(filepath=args.out + ".glb", export_format="GLB", use_selection=True)

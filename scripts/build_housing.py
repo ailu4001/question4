@@ -146,19 +146,6 @@ def main():
     make_material(housing)
     cam, center = setup_scene(55, 66)
 
-    os.makedirs(os.path.dirname(os.path.abspath(args.out)), exist_ok=True)
-    scene.render.engine = resolve_engine(args.engine)
-    scene.render.resolution_x = 1600
-    scene.render.resolution_y = 1200
-    scene.render.image_settings.file_format = "PNG"
-    dist = 55 * 2 * MM * 2.6
-    views = [("front", (0.0, 1.0, 0.5)), ("quarter", (1.1, 1.0, 0.85)), ("top", (0.4, 0.9, 1.8))]
-    for vname, vdir in views:
-        place_camera(cam, center, dist, vdir)
-        scene.render.filepath = args.out + "_" + vname + ".png"
-        bpy.ops.render.render(write_still=True)
-        print("[OK] rendered ->", args.out + "_" + vname + ".png")
-
     try:
         bpy.ops.preferences.addon_enable(module="io_scene_gltf2")
     except Exception:
