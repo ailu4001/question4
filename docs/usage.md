@@ -77,3 +77,12 @@ blender output/hydraulic_view.blend   # 或先生成 .blend
 3. **浏览器预览**：three.js 预览需 WebGL；在受限/内嵌浏览器中可能黑屏（本机 Codex 内嵌浏览器即如此），**最可靠查看方式是 Blender 打开 .blend**；`file://` 直接双击 HTML 会因 CORS 限制无法加载 glb，请用本地 http 服务；
 4. **无头渲染**：渲染引擎名称错误会直接报错（脚本有兜底）；首次运行 Blender 需联网/写用户配置；
 5. **中文路径**：含中文的路径/文件名在部分工具链可能产生编码问题，建议工程路径尽量用英文。
+
+## H. 一键复现全部程序
+```powershell
+python scripts/run_all.py [--blender <路径>] [--python <路径>] [--keep-going]
+```
+- 自动完成：冒烟测试、素材/中间贴图生成、P1–P4 建模导出、生成 4 个 `.blend`、统一渲染 12 张展示图；
+- 每步独立日志：`logs/run_all_<步骤名>.log`；
+- 说明：`--python` 需为含 Pillow/numpy 的真实 Python（Windows 商店占位 python 会被自动跳过）；
+- 已本地验证：16/16 步通过。

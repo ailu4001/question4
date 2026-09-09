@@ -46,6 +46,15 @@ blender output/housing_view.blend
 
 操作：中键旋转、滚轮缩放、Shift+中键平移；小键盘 1/3/7 切换前/右/顶视图。
 
+## 一键复现（推荐）
+
+```powershell
+python scripts/run_all.py                     # 自动探测 Blender/Python
+python scripts/run_all.py --blender "C:\Program Files\Blender Foundation\Blender 5.0\blender.exe" --python <你的python>
+python scripts/run_all.py --keep-going        # 某步失败仍继续
+```
+
+自动按依赖顺序运行：冒烟 → 素材生成 → 4 个案例建模 → 生成 4 个 `.blend` → 统一渲染 12 张展示图；每步日志在 `logs/run_all_*.log`。
 ## 命令行复现
 
 ```powershell
