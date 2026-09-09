@@ -13,6 +13,29 @@
 | **P4 液压缸** | `assets/cad2_kAmpQGMUEd7t9Zok.jpg` 机械零件图纸 | `output/hydraulic_view.blend` / `hydraulic.glb` / 多视角 PNG | 缸筒+两端法兰+活塞杆+油口，参数化建模，Blender 打开查看 |
 | 工业刀版图 | — | `assets/industrial/fefco0201_dieline.svg/png` | 按 FEFCO 0201 标准生成的展开刀版图（v2 折叠素材） |
 
+## 成果展示（渲染成果图）
+
+> 图片位于仓库 `output/`，GitHub 可直接渲染；也可用 Blender 打开 `output/*_view.blend` 交互查看。
+
+### P3 阶梯回转壳体（CAD 机械零件）
+![壳体-正面](output/housing_front.png)
+![壳体-45度](output/housing_quarter.png)
+![壳体-俯视](output/housing_top.png)
+
+### P4 液压缸（CAD 机械零件）
+![液压缸-正面](output/hydraulic_front.png)
+![液压缸-45度](output/hydraulic_quarter.png)
+![液压缸-俯视](output/hydraulic_top.png)
+
+### P1 包装盒
+![包装盒-正面](output/preview_front.png)
+![包装盒-45度](output/preview_quarter.png)
+![包装盒-俯视](output/preview_top.png)
+
+### P2 人物浮雕
+![人物浮雕-正面](output/person_front.png)
+![人物浮雕-45度](output/person_quarter.png)
+![人物浮雕-俯视](output/person_top.png)
 ## 最快查看 3D 结果（推荐）
 
 **用 Blender 打开**（不依赖浏览器 WebGL）：
