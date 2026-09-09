@@ -1,0 +1,22 @@
+{
+  "text": "生成液压缸 缸筒外径80 长260",
+  "parser": "demo",
+  "project": "hydraulic",
+  "params_mm": {
+    "barrel_radius_mm": 40.0,
+    "barrel_length_mm": 260.0
+  },
+  "dimension_source": {
+    "from_drawing": [],
+    "from_nl": [
+      "缸筒外径"
+    ],
+    "ai_default": [
+      "法兰Ø110",
+      "活塞杆Ø28伸250",
+      "油口Ø30",
+      "壁厚/内腔"
+    ]
+  },
+  "note": "图纸标注未自动读取(无OCR)；CAD案例尺寸为AI默认+一句话补充，需按图纸核对。见 docs/nl_driven_workflow.md"
+}

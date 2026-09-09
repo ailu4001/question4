@@ -1,0 +1,18 @@
+{
+  "text": "做一个包装盒 200x120x80 mm",
+  "parser": "demo",
+  "project": "pack",
+  "params_mm": {
+    "width_mm": 200.0,
+    "depth_mm": 120.0,
+    "height_mm": 80.0
+  },
+  "dimension_source": {
+    "from_drawing": [],
+    "from_nl": [
+      "长×宽×高"
+    ],
+    "ai_default": []
+  },
+  "note": "图纸标注未自动读取(无OCR)；CAD案例尺寸为AI默认+一句话补充，需按图纸核对。见 docs/nl_driven_workflow.md"
+}

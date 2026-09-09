@@ -86,3 +86,13 @@ python scripts/run_all.py [--blender <路径>] [--python <路径>] [--keep-going
 - 每步独立日志：`logs/run_all_<步骤名>.log`；
 - 说明：`--python` 需为含 Pillow/numpy 的真实 Python（Windows 商店占位 python 会被自动跳过）；
 - 已本地验证：16/16 步通过。
+
+## I. 自然语言驱动（一句话 → 3D）
+```powershell
+python scripts/nl_to_3d.py --text "做一个包装盒 200x120x80 mm" --blender "<blender路径>"
+python scripts/nl_to_3d.py --text "生成液压缸 缸筒外径80 长260" --blender "<blender路径>"
+python scripts/nl_to_3d.py --text "做一个阶梯回转壳体" --blender "<blender路径>"
+python scripts/nl_to_3d.py --text "壳体" --demo-only
+```
+- 离线解析器（PARSER=demo）用于可复现演示；真实理解由 LLM 完成（实录见 docs/nl_driven_workflow.md）；
+- 每步输出结构化 JSON（含 dimension_source 尺寸来源标注）到 output/nl_<项目>.json，并自动调用 Blender 建模+渲染。

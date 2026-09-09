@@ -1,0 +1,21 @@
+{
+  "text": "做一个阶梯回转壳体",
+  "parser": "demo",
+  "project": "housing",
+  "params_mm": {
+    "note": "阶梯回转壳体，使用脚本默认参数(法兰Ø110/主体Ø80/凸台Ø40/总高66)"
+  },
+  "dimension_source": {
+    "from_drawing": [],
+    "from_nl": [],
+    "ai_default": [
+      "法兰Ø110×8",
+      "主体Ø80×50",
+      "凸台Ø40×8",
+      "内腔Ø68",
+      "4×Ø8孔",
+      "总高66"
+    ]
+  },
+  "note": "图纸标注未自动读取(无OCR)；CAD案例尺寸为AI默认+一句话补充，需按图纸核对。见 docs/nl_driven_workflow.md"
+}

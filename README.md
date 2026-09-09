@@ -46,6 +46,19 @@ blender output/housing_view.blend
 
 操作：中键旋转、滚轮缩放、Shift+中键平移；小键盘 1/3/7 切换前/右/顶视图。
 
+## 自然语言驱动（一句话 → 3D）
+
+用户输入一句自然语言，AI 将其转成结构化参数并自动调用 Blender 得到结果：
+
+```powershell
+python scripts/nl_to_3d.py --text "做一个包装盒 200x120x80 mm" --blender "<blender路径>"
+python scripts/nl_to_3d.py --text "生成液压缸 缸筒外径80 长260" --blender "<blender路径>"
+python scripts/nl_to_3d.py --text "做一个阶梯回转壳体"          --blender "<blender路径>"
+python scripts/nl_to_3d.py --text "壳体" --demo-only   # 只看 NL→JSON 解析
+```
+
+- **AI 参与全流程实录**（真实对话决策 + CAD 尺寸来源标注：哪些来自图纸 / 一句话 / AI 默认）见 [docs/nl_driven_workflow.md](docs/nl_driven_workflow.md)；
+- 演示产物：`output/nl_*.json`、`output/nl_*.glb`、`output/nl_*_*.png`。
 ## 一键复现（推荐）
 
 ```powershell
