@@ -26,9 +26,9 @@ def parse_args():
     argv = argv[argv.index("--") + 1:] if "--" in argv else []
     p = argparse.ArgumentParser(description="2D 正面图 -> 3D 包装盒渲染")
     p.add_argument("--front", required=True, help="正面设计图路径(PNG/JPG)")
-    p.add_argument("--width", type=float, default=0.18, help="盒宽(米)")
-    p.add_argument("--depth", type=float, default=0.045, help="盒深(米)")
-    p.add_argument("--height", type=float, default=0.045, help="盒高(米)")
+    p.add_argument("--width", type=float, default=180, help="盒宽(毫米)")
+    p.add_argument("--depth", type=float, default=45, help="盒深(毫米)")
+    p.add_argument("--height", type=float, default=45, help="盒高(毫米)")
     for axis in ["right", "left", "top", "bottom", "back"]:
         p.add_argument("--" + axis, default=None, help=axis + " 面图片(可选)")
     p.add_argument("--engine", default="auto", choices=["auto", "EEVEE", "CYCLES"])
@@ -167,6 +167,10 @@ def export_glb(obj, filepath):
 
 def main():
     args = parse_args()
+    # 参数为毫米，此处换算为 Blender 米
+    args.width *= 0.001
+    args.depth *= 0.001
+    args.height *= 0.001
     clean_scene()
     scene = bpy.context.scene
     scene.unit_settings.system = "METRIC"

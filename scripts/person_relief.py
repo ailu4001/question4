@@ -16,8 +16,11 @@ import bmesh
 import bpy
 from mathutils import Vector
 
-WIDTH = 0.24      # 板宽(米)
-THICK = 0.035     # 最大浮雕厚度(米)
+MM = 0.001
+WIDTH_MM = 240.0   # 板宽(毫米)
+THICK_MM = 35.0    # 最大浮雕厚度(毫米)
+WIDTH = WIDTH_MM * MM
+THICK = THICK_MM * MM
 
 
 def parse_args():

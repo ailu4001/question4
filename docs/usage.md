@@ -21,9 +21,9 @@ blender --background --python scripts/build_housing.py -- --out output/housing
 ```powershell
 python scripts/make_placeholder_front.py assets/front.png   # 无素材时生成占位正面图
 blender --background --python scripts/build_pack.py -- `
-  --front assets/front.png --width 0.18 --depth 0.045 --height 0.045 --out output/preview
+  --front assets/front.png --width 180 --depth 45 --height 45 --out output/preview
 ```
-参数：`--front` 正面图（+Y 面向镜头）；`--width/depth/height` 盒尺寸(米)；其余五面可 `--right/--left/--top/--bottom/--back` 指定，缺省纯色兜底；`--engine EEVEE|CYCLES`。
+参数：`--front` 正面图（+Y 面向镜头）；`--width/depth/height` 盒尺寸(毫米)；其余五面可 `--right/--left/--top/--bottom/--back` 指定，缺省纯色兜底；`--engine EEVEE|CYCLES`。
 
 ## D. 人物浮雕（P2）
 ```powershell
