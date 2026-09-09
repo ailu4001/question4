@@ -1,0 +1,6 @@
+# 过程日志与缓存
+*.log
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db

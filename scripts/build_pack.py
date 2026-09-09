@@ -85,21 +85,22 @@ def assign_materials(obj, args):
 
 def scene_setup(center, size_max):
     # 相机：从 +Y 看向盒子中心
-    dist = size_max * 2.6
+    dist = size_max * 1.25
     cam = bpy.data.objects.new("Cam", bpy.data.cameras.new("Cam"))
     bpy.context.scene.collection.objects.link(cam)
-    cam.location = center + Vector((0.0, dist * 0.98, dist * 0.35))
+    cam.location = center + Vector((0.0, dist * 0.98, dist * 0.30))
     cam.rotation_euler = (center - cam.location).to_track_quat("-Z", "Y").to_euler()
+    bpy.context.scene.camera = cam  # 设为活动相机，否则渲染报 no camera
 
     # 主光：相机同侧上方（保证正面受光）
     key = bpy.data.objects.new("Key", bpy.data.lights.new("Key", type="AREA"))
-    key.data.energy, key.data.size = 80.0, 1.0
+    key.data.energy, key.data.size = 60.0, 1.0
     bpy.context.scene.collection.objects.link(key)
     key.location = center + Vector((size_max * 0.6, size_max * 0.9, size_max * 1.6))
 
     # 补光：正上方柔和环境光
     fill = bpy.data.objects.new("Fill", bpy.data.lights.new("Fill", type="AREA"))
-    fill.data.energy, fill.data.size = 30.0, 2.5
+    fill.data.energy, fill.data.size = 12.0, 2.5
     bpy.context.scene.collection.objects.link(fill)
     fill.location = center + Vector((0.0, 0.0, size_max * 2.4))
 
@@ -107,24 +108,31 @@ def scene_setup(center, size_max):
     world = bpy.data.worlds.new("Studio")
     bpy.context.scene.world = world
     world.use_nodes = True
-    world.node_tree.nodes["Background"].inputs[0].default_value = (0.02, 0.02, 0.03, 1.0)
+    world.node_tree.nodes["Background"].inputs[0].default_value = (0.05, 0.05, 0.06, 1.0)
 
 
 def add_ground(size_max):
-    bpy.ops.mesh.primitive_plane_add(size=size_max * 20.0, location=(0, 0, 0))
+    bpy.ops.mesh.primitive_plane_add(size=size_max * 3.0, location=(0, 0, 0))
     ground = bpy.context.object
     ground.name = "Ground"
-    mat = make_material("mat_ground", color=(0.95, 0.95, 0.97, 1.0))
+    mat = make_material("mat_ground", color=(0.82, 0.82, 0.85, 1.0))
     ground.data.materials.append(mat)
 
 
 def resolve_engine(name):
-    next_eevee = bpy.app.version >= (4, 2, 0)
+    # 引擎标识随 Blender 版本变化：
+    #   4.2 - 4.x: BLENDER_EEVEE_NEXT；5.0+：恢复为 BLENDER_EEVEE
+    if bpy.app.version >= (5, 0, 0):
+        eevee = "BLENDER_EEVEE"
+    elif bpy.app.version >= (4, 2, 0):
+        eevee = "BLENDER_EEVEE_NEXT"
+    else:
+        eevee = "BLENDER_EEVEE"
     if name == "CYCLES":
         return "CYCLES"
     if name == "EEVEE":
-        return "BLENDER_EEVEE_NEXT" if next_eevee else "BLENDER_EEVEE"
-    return "BLENDER_EEVEE_NEXT" if next_eevee else "BLENDER_EEVEE"
+        return eevee
+    return eevee
 
 
 def render(scene, filepath, engine, samples):

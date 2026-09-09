@@ -1,66 +1,48 @@
 # 使用说明（usage.md）
 
-## 环境要求
+## 环境
+- Blender 3.6+（推荐 4.x/5.x；自带 Python）
+- 普通 Python（可选，仅浮雕/刀版图预处理用，需 Pillow/numpy）
 
-| 项 | 要求 |
-|---|---|
-| Blender | 3.6 或更高（4.x 推荐；自带 Python，无需安装第三方包） |
-| 生成占位素材 | 可选；Python 3 标准库即可（`scripts/make_placeholder_front.py`） |
-| 系统 | Windows / macOS / Linux 均可（以下命令以 Windows PowerShell 为例） |
-
-## 1. 冒烟测试（先确认 Blender 可无头运行）
-
+## A. 查看 3D 结果
 ```powershell
-blender --background --python tests/smoke_test.py --python-exit-code 1
+blender output/housing_view.blend
 ```
+中键旋转 / 滚轮缩放 / Shift+中键平移；着色切换 Material Preview 更直观。
 
-正常输出末尾包含 `[SMOKE OK] blender 4.x.x`。
-
-## 2. 生成占位正面素材（可选）
-
+## B. CAD 机械壳体建模（P3 主案例）
 ```powershell
-python scripts/make_placeholder_front.py assets/front.png
+blender --background --python scripts/build_housing.py -- --out output/housing
 ```
+输出 `housing_front/quarter/top.png` 与 `housing.glb`。
+改尺寸：编辑 `scripts/build_housing.py` 中法兰 R55/h8、主体 R40/h50、凸台 R20/h8、内腔 R34、顶孔 R10、安装孔 4×R4 等参数（单位 mm）。
 
-生成 800x800 的示意「包装正面」图（米白底 + 品牌色带 + 主视觉方块）。
-
-## 3. 运行最小原型
-
+## C. 包装盒（P1）
 ```powershell
+python scripts/make_placeholder_front.py assets/front.png   # 无素材时生成占位正面图
 blender --background --python scripts/build_pack.py -- `
-  --front assets/front.png `
-  --width 0.18 --depth 0.045 --height 0.045 `
-  --out output/preview
+  --front assets/front.png --width 0.18 --depth 0.045 --height 0.045 --out output/preview
 ```
+参数：`--front` 正面图（+Y 面向镜头）；`--width/depth/height` 盒尺寸(米)；其余五面可 `--right/--left/--top/--bottom/--back` 指定，缺省纯色兜底；`--engine EEVEE|CYCLES`。
 
-### 参数说明
+## D. 人物浮雕（P2）
+```powershell
+python scripts/make_relief_maps.py --input assets/鹿乃2.jpg
+blender --background --python scripts/person_relief.py -- `
+  --albedo assets/relief_albedo.png --height assets/relief_height.png --out output/person
+```
+预处理用"最近背景样本色距"抠前景生成高度图；`person_relief.py` 把高度图映射为网格 Z 位移形成浮雕板。
 
-| 参数 | 必填 | 默认 | 说明 |
-|---|---|---|---|
-| `--front` | 是 | — | 正面设计图（贴到 +Y，面向镜头） |
-| `--width / --depth / --height` | 否 | 0.18 / 0.045 / 0.045 | 盒宽/深/高（米） |
-| `--right/--left/--top/--bottom/--back` | 否 | 无 | 对应面图片；缺省为纯色兜底 |
-| `--engine` | 否 | auto | `auto`（EEVEE）/ `EEVEE` / `CYCLES` |
-| `--samples` | 否 | 64 | 采样数（Cycles 有效） |
-| `--out` | 是 | — | 输出前缀，如 `output/preview` |
+## E. 工业刀版图（FEFCO 0201）
+```powershell
+python scripts/make_fefco_dieline.py
+```
+输出 `assets/industrial/fefco0201_dieline.svg/.png`；改 `L,W,H` 可重生成。
+真实工业 dieline 在线来源：Templatemaker / PackPaa / Tanur / DieCutTemplates（见 `assets/industrial/README.md`）。
 
-### 输出
-
-- `output/preview_front.png`：正面视角渲染图
-- `output/preview.glb`：glTF 模型（可拖进任何 3D 查看器 / 网页展示）
-
-## 4. 常见问题（FAQ）
-
+## FAQ
 | 问题 | 处理 |
 |---|---|
-| 渲染图里文字上下/左右颠倒 | 说明素材方向与 Blender UV 不一致：把图片垂直翻转后重试；或反馈给作者调整 UV 方向 |
-| glTF 导出报 WARN | 不影响渲染；多为插件未启用，脚本会自动尝试启用 `io_scene_gltf2` |
-| Cycles 太慢 | 先用默认 EEVEE 迭代，最终出图再 `--engine CYCLES` |
-| 想换对象（罐/瓶） | 属于 v2；当前模板面向长方体包装盒，可参照 `build_pack.py` 的 `add_box` 自行扩展旋转体 |
-| 控制台中文乱码 | 仅影响打印信息，不影响出图；可将终端代码页切到 UTF-8 |
-
-## 5. 素材规格建议（assets）
-
-- 格式：PNG / JPG；建议正方形（如 1024x1024），正面素材主体居中。
-- 可选六面图命名：`front/back/left/right/top/bottom.png`，对应 `--front/--back/...` 参数。
-- 展示级渲染时贴图分辨率建议不低于 1024；手机壳/包装类 2048 更佳。
+| 浏览器 3D 预览黑屏 | 内嵌/受限浏览器可能禁用 WebGL；改用 Blender 打开 .blend |
+| 渲染图文字倒置 | 把输入图垂直翻转或调整 UV |
+| glTF 导出 WARN | 不影响渲染，脚本自动尝试启用 io_scene_gltf2 |

@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="745.0mm" height="250.0mm" viewBox="-30 -30 805.0 310.0">
+<rect x="-30" y="-30" width="805.0" height="310.0" fill="#fafafa"/>
+<style>.cut{stroke:#d32f2f;stroke-width:1.2;fill:none}.score{stroke:#1565c0;stroke-width:1.2;stroke-dasharray:6 4;fill:none}.txt{font:11px sans-serif;fill:#333}</style>
+<line class="cut" x1="0.0" y1="75.0" x2="0.0" y2="175.0"/>
+<line class="cut" x1="0.0" y1="75.0" x2="45.0" y2="75.0"/>
+<line class="cut" x1="0.0" y1="175.0" x2="45.0" y2="175.0"/>
+<line class="cut" x1="45.0" y1="0.0" x2="45.0" y2="250.0"/>
+<line class="cut" x1="745.0" y1="0.0" x2="745.0" y2="250.0"/>
+<line class="cut" x1="45.0" y1="0.0" x2="745.0" y2="0.0"/>
+<line class="cut" x1="45.0" y1="250.0" x2="745.0" y2="250.0"/>
+<line class="cut" x1="245.0" y1="0.0" x2="245.0" y2="75.0"/>
+<line class="score" x1="245.0" y1="75.0" x2="245.0" y2="175.0"/>
+<line class="cut" x1="245.0" y1="175.0" x2="245.0" y2="250.0"/>
+<line class="cut" x1="395.0" y1="0.0" x2="395.0" y2="75.0"/>
+<line class="score" x1="395.0" y1="75.0" x2="395.0" y2="175.0"/>
+<line class="cut" x1="395.0" y1="175.0" x2="395.0" y2="250.0"/>
+<line class="cut" x1="595.0" y1="0.0" x2="595.0" y2="75.0"/>
+<line class="score" x1="595.0" y1="75.0" x2="595.0" y2="175.0"/>
+<line class="cut" x1="595.0" y1="175.0" x2="595.0" y2="250.0"/>
+<line class="score" x1="45.0" y1="75.0" x2="745.0" y2="75.0"/>
+<line class="score" x1="45.0" y1="175.0" x2="745.0" y2="175.0"/>
+<text class="txt" x="145.0" y="129.0" text-anchor="middle">200</text>
+<text class="txt" x="320.0" y="129.0" text-anchor="middle">150</text>
+<text class="txt" x="495.0" y="129.0" text-anchor="middle">200</text>
+<text class="txt" x="670.0" y="129.0" text-anchor="middle">150</text>
+<text class="txt" x="22" y="129.0" text-anchor="middle">接舌45</text>
+<text class="txt" x="37.0" y="125.0" text-anchor="middle">H=100</text>
+<text class="txt" x="45.0" y="14">FEFCO 0201 (RSC)  L=200 W=150 H=100  mm   实线=切线  虚线=折线</text>
+</svg>
