@@ -43,8 +43,9 @@ def clean_scene():
 
 
 def add_cyl(name, radius, z0, z1, verts=64):
-    bpy.ops.mesh.primitive_cylinder_add(vertices=verts, radius=radius,
-                                        depth=z1 - z0, location=(0, 0, (z0 + z1) / 2))
+    # 参数单位 mm，此处换算为 Blender 米
+    bpy.ops.mesh.primitive_cylinder_add(vertices=verts, radius=radius * MM,
+                                        depth=(z1 - z0) * MM, location=(0, 0, (z0 + z1) / 2 * MM))
     obj = bpy.context.object
     obj.name = name
     return obj
@@ -156,12 +157,12 @@ def main():
 
     # 油口(水平)
     for z in PORT_Z:
-        bpy.ops.mesh.primitive_cylinder_add(vertices=48, radius=PORT_R,
-                                            depth=PORT_LEN, location=(0, 0, z))
+        bpy.ops.mesh.primitive_cylinder_add(vertices=48, radius=PORT_R * MM,
+                                            depth=PORT_LEN * MM, location=(0, 0, z * MM))
         po = bpy.context.object
         po.name = "port"
         po.rotation_euler = (0, math.pi / 2, 0)
-        po.location = (BARREL_R + PORT_LEN / 2 + 0.5, 0, z)
+        po.location = ((BARREL_R + PORT_LEN / 2 + 0.5) * MM, 0, z * MM)
         assign(po, mat_body)
 
     center, radius = scene_bounds()

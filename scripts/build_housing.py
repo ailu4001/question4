@@ -34,8 +34,9 @@ def clean_scene():
 
 
 def add_cyl(name, radius, z0, z1, verts=72):
-    bpy.ops.mesh.primitive_cylinder_add(vertices=verts, radius=radius,
-                                        depth=z1 - z0, location=(0, 0, (z0 + z1) / 2))
+    # 参数单位 mm，此处换算为 Blender 米
+    bpy.ops.mesh.primitive_cylinder_add(vertices=verts, radius=radius * MM,
+                                        depth=(z1 - z0) * MM, location=(0, 0, (z0 + z1) / 2 * MM))
     obj = bpy.context.object
     obj.name = name
     return obj
