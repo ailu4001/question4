@@ -46,3 +46,10 @@ python scripts/make_fefco_dieline.py
 | 浏览器 3D 预览黑屏 | 内嵌/受限浏览器可能禁用 WebGL；改用 Blender 打开 .blend |
 | 渲染图文字倒置 | 把输入图垂直翻转或调整 UV |
 | glTF 导出 WARN | 不影响渲染，脚本自动尝试启用 io_scene_gltf2 |
+
+## F. 液压缸（P4）
+```powershell
+blender --background --python scripts/build_hydraulic.py -- --out output/hydraulic
+blender output/hydraulic_view.blend   # 或先生成 .blend
+```
+改尺寸：编辑 `scripts/build_hydraulic.py` 顶部常量（缸筒 BARREL_R/Z、法兰 CAP_R、活塞杆 ROD_R、油口 PORT_R 等，单位 mm）。

@@ -12,3 +12,4 @@
 | 2026-09-09 | 浏览器 3D 预览 | 黑屏 | WebGL 受限；服务器日志证明文件正常 | 改 Blender 查看 |
 | 2026-09-09 | housing_view.blend + Blender GUI | 用户确认成功 | — | 提交仓库 |
 | 2026-09-09 | 整理仓库、更新文档 | 进行中 | — | 提交 GitHub |
+| 2026-09-09 | P4 液压缸(cad2图纸) 建模+渲染+Blender查看 | 用户确认很好 | 修复油口旋转为 rotation_euler | 提交 GitHub |

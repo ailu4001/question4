@@ -10,3 +10,4 @@
 | 6 查看验证 | Blender GUI 确认 | ✅ |
 | 7 仓库整理 | README/usage/analysis/dev_log 更新 | ✅ |
 | 8 提交 | git 提交（待 push 到 GitHub） | 进行中 |
+| 9 P4 液压缸 | CAD图纸 → 参数化建模 → Blender 确认 | ✅ |

@@ -31,6 +31,11 @@
 
 副案例：P1 包装盒（六面贴图）、P2 人物浮雕（最近背景样本抠图）、FEFCO 0201 刀版图生成，均已跑通并记录于 dev_log。
 
+## 5b. 液压缸案例（P4）
+- 输入：`assets/cad2_kAmpQGMUEd7t9Zok.jpg`（机械零件图纸；自动识别线条过淡，靠用户一句话"液压缸"确定方案）。
+- 建模：`scripts/build_hydraulic.py`（缸筒 Ø80×260 + 两端法兰 Ø110 + 活塞杆 Ø28 伸出 250 + 两侧油口 Ø30）。
+- 结果：`output/hydraulic_front/quarter/top.png`、`hydraulic.glb`、`hydraulic_view.blend`；Blender 打开查看，用户确认。
+- 调试记录：油口旋转在 Blender 5.0 改用对象 rotation_euler（transform.rotate 参数已变化）。
 ## 6. 结论与展望
 - 可靠路线：模板/参数化承接几何 + 一句话/迭代修改 + 无头可复现 + Blender 查看。
 - v2 展望：CAD 标注 OCR 自动读尺寸、dieline 自动折叠、多视图重建、LLM 排错闭环。
