@@ -9,7 +9,7 @@
 |---|---|---|---|
 | **P3 CAD 机械壳体（主案例）** | `assets/cad_8191871.jpg` 机械零件工程图 | `output/housing_view.blend` / `housing.glb` / 三视角 PNG | 按"阶梯回转壳体"参数化建模（法兰+主体+凸台+内腔+安装孔），**用 Blender 直接打开查看** |
 | P1 包装盒 | `assets/front.png` 正面设计图 | `output/preview_front.png` / `preview.glb` | 六面贴图长方体包装盒 |
-| P2 人物浮雕 | `assets/鹿乃人设图.jpg` 等 | `output/person_front.png` / `person.glb` | 最近背景样本抠图 + 高度图浮雕（2.5D） |
+| P2 人物浮雕 | `assets/鹿乃2.jpg` | `output/person_front.png` / `person.glb` | 最近背景样本抠图 + 高度图浮雕（2.5D） |
 | **P4 液压缸** | `assets/cad2_kAmpQGMUEd7t9Zok.jpg` 机械零件图纸 | `output/hydraulic_view.blend` / `hydraulic.glb` / 多视角 PNG | 缸筒+两端法兰+活塞杆+油口，参数化建模，Blender 打开查看 |
 | 工业刀版图 | — | `assets/industrial/fefco0201_dieline.svg/png` | 按 FEFCO 0201 标准生成的展开刀版图（v2 折叠素材） |
 
