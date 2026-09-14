@@ -25,14 +25,6 @@ blender --background --python scripts/build_pack.py -- `
 ```
 参数：`--front` 正面图（+Y 面向镜头）；`--width/depth/height` 盒尺寸(毫米)；其余五面可 `--right/--left/--top/--bottom/--back` 指定，缺省纯色兜底；`--engine EEVEE|CYCLES`。
 
-## D. 人物浮雕（P2）
-```powershell
-python scripts/make_relief_maps.py --input assets/鹿乃2.jpg
-blender --background --python scripts/person_relief.py -- `
-  --albedo assets/relief_albedo.png --height assets/relief_height.png --out output/person
-```
-预处理用"最近背景样本色距"抠前景生成高度图；`person_relief.py` 把高度图映射为网格 Z 位移形成浮雕板。
-
 ## E. 工业刀版图（FEFCO 0201）
 ```powershell
 python scripts/make_fefco_dieline.py
@@ -59,7 +51,7 @@ blender output/hydraulic_view.blend   # 或先生成 .blend
 
 ### 优势
 1. **可复现、可追溯**：全流程脚本化（Blender 无头执行），Git 记录每次脚本与输出，换机器/换参数可重跑；
-2. **几何正确性可控**：几何由参数化模板/脚本承接（回转体、盒体、浮雕），不依赖模型自由"造点"，出错面小；
+2. **几何正确性可控**：几何由参数化模板/脚本承接（回转体、盒体），不依赖模型自由"造点"，出错面小；
 3. **迭代成本低**：用一句话/几个参数描述即可出初版，改参数重跑即可迭代（对应考题"一句话生成+修改"）；
 4. **查看与交付方便**：产出 `.blend`（Blender 直接打开）、`.glb`（网页/游戏/AR 通用）、多视角 PNG；
 5. **免费开源、可扩展**：Blender 开源免费；新增对象类型只需仿照 `build_housing.py / build_hydraulic.py` 写一个参数化脚本；

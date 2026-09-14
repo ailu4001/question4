@@ -98,23 +98,16 @@ def main():
         ('smoke_test', BL + ['--python', os.path.join(T, 'smoke_test.py'), '--python-exit-code', '1']),
         ('make_placeholder_front', p(S + '/make_placeholder_front.py', os.path.join('assets', 'front.png'))),
         ('make_fefco_dieline', p(S + '/make_fefco_dieline.py')),
-        ('make_relief_maps', p(S + '/make_relief_maps.py', '--input', os.path.join('assets', '鹿乃2.jpg'),
-                               '--albedo', os.path.join('assets', 'relief_albedo.png'),
-                               '--height', os.path.join('assets', 'relief_height.png'))),
         ('P1_build_pack', b(S + '/build_pack.py', '--front', os.path.join('assets', 'front.png'),
                             '--out', os.path.join('output', 'preview'))),
-        ('P2_person_relief', b(S + '/person_relief.py',
-                               '--albedo', os.path.join('assets', 'relief_albedo.png'),
-                               '--height', os.path.join('assets', 'relief_height.png'),
-                               '--out', os.path.join('output', 'person'))),
         ('P3_build_housing', b(S + '/build_housing.py', '--out', os.path.join('output', 'housing'))),
         ('P4_build_hydraulic', b(S + '/build_hydraulic.py', '--out', os.path.join('output', 'hydraulic'))),
     ]
-    for tag, glb in [('preview', 'preview'), ('person', 'person'), ('housing', 'housing'), ('hydraulic', 'hydraulic')]:
+    for tag, glb in [('preview', 'preview'), ('housing', 'housing'), ('hydraulic', 'hydraulic')]:
         steps.append(('blend_' + tag, b(S + '/make_blend_view.py',
                                         '--glb', os.path.join('output', glb + '.glb'),
                                         '--out', os.path.join('output', glb + '_view.blend'))))
-    for tag, glb in [('preview', 'preview'), ('person', 'person'), ('housing', 'housing'), ('hydraulic', 'hydraulic')]:
+    for tag, glb in [('preview', 'preview'), ('housing', 'housing'), ('hydraulic', 'hydraulic')]:
         steps.append(('render_' + tag, b(S + '/render_glb.py',
                                          '--glb', os.path.join('output', glb + '.glb'),
                                          '--out', os.path.join('output', tag),
