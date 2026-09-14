@@ -66,12 +66,53 @@ def parse_bitmap(path):
             "closed_regions": 0, "status": "ok(启发式)"}
 
 
+def _pdf_raster(path):
+    """扫描件 PDF：栅格化首页后按位图分析（poppler + pdf2image）。"""
+    import tempfile
+    try:
+        from pdf2image import convert_from_path
+        pages = convert_from_path(path, dpi=150, first_page=1, last_page=1)
+        tmp = os.path.join(tempfile.gettempdir(), "folda_pdf_page1.png")
+        pages[0].save(tmp)
+        r = parse_bitmap(tmp)
+        r["format"] = "PDF"
+        r["mode"] = "raster"
+        r["status"] = "ok(raster 150dpi)"
+        return r
+    except Exception as e:  # noqa: BLE001
+        return {"format": "PDF", "mode": "raster", "cut_candidates": 0,
+                "crease_candidates": 0, "closed_regions": 0, "status": "raster失败: %s" % e}
+
+
 def parse_pdf(path):
-    with open(path, "rb") as f:
-        head = f.read(8)
-    ok = head.startswith(b"%PDF")
-    return {"format": "PDF", "cut_candidates": 0, "crease_candidates": 0, "closed_regions": 0,
-            "status": "detected(需栅格化/矢量解析, 部分支持)" if ok else "invalid"}
+    """PDF 接入：优先矢量解析(线段/矩形/虚线)，无矢量图元则栅格化走位图分析。"""
+    try:
+        with open(path, "rb") as f:
+            if not f.read(5).startswith(b"%PDF"):
+                return {"format": "PDF", "status": "invalid(非PDF文件)"}
+        import pdfplumber
+        with pdfplumber.open(path) as pdf:
+            page = pdf.pages[0]
+            lines = list(page.lines or [])
+            rects = list(page.rects or [])
+            curves = list(page.curves or [])
+            if lines or rects or curves:
+                cut = crease = 0
+                for item in list(lines) + list(rects):
+                    d = item.get("dash") or ([], 0)
+                    if d and d[0]:
+                        crease += 1        # 虚线 = 折线候选
+                    else:
+                        cut += 1           # 实线 = 切线候选
+                cut += len(curves)
+                return {"format": "PDF", "mode": "vector",
+                        "cut_candidates": cut, "crease_candidates": crease,
+                        "closed_regions": len(rects), "status": "ok(vector)",
+                        "page_size": [round(page.width, 1), round(page.height, 1)]}
+            return _pdf_raster(path)       # 无矢量图元 -> 扫描件
+    except Exception as e:  # noqa: BLE001
+        return {"format": "PDF", "cut_candidates": 0, "crease_candidates": 0,
+                "closed_regions": 0, "status": "解析失败: %s" % e}
 
 
 def analyze(path):

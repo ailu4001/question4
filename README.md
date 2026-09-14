@@ -108,7 +108,7 @@ python scripts/make_fefco_dieline.py
 |---|---|---|
 | 自然语言理解（对象/尺寸/材质/灯光/相机/画幅） | `scripts/mvp/nl_parser.py` + `schema.py` | 20 条固定意图 **100%**（≥90%） |
 | 6 个结构模板（插扣盒/套盒/立式袋 ×2） | `scripts/mvp/packaging.py` | 6/6 生成成功 |
-| 刀模/素材接入（SVG/位图/PDF 检测） | `scripts/mvp/dieline.py` | 折线召回 44/44 = 100%（标准样张） |
+| 刀模/素材接入（PNG/JPG/SVG/PDF） | `scripts/mvp/dieline.py`（PDF 矢量 + 扫描件栅格化回退） | SVG 44/44、PDF 55/55 折线召回 100%（标准样张） |
 | UV 越界检查 + 材质预设 | `packaging.py` uv_check | 越界 **0%**（≤5%） |
 | 局部编辑 Diff + 版本 | `diff_engine.py` + `version_store.py` | 4 项分类变更；版本递增 |
 | 渲染预设（3 灯光×3 镜头、2K、多画幅） | `render_mvp.py` | 2048×2560 单张 ~10 秒 |

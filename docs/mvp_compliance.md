@@ -7,7 +7,7 @@
 
 | 模块 | 产品方案要求 | 实现 | 实测/证据 | 状态 |
 |---|---|---|---|---|
-| M1 素材接入与诊断 | PNG/JPG/SVG/扁平PDF；识别尺寸/文字/主视觉/刀模线 | `mvp/dieline.py`：SVG 解析(虚线=折线/实线=切线/rect=闭合区)；位图行列投影启发式；PDF 签名检测 | SVG 测试样张 10/10 解析成功；PDF 为检测级（未栅格化，标注部分支持） | ⚠️ 部分（PDF 待补） |
+| M1 素材接入与诊断 | PNG/JPG/SVG/扁平PDF；识别尺寸/文字/主视觉/刀模线 | `mvp/dieline.py`：SVG 解析；**PDF 矢量解析(pdfplumber：虚线=折线/实线=切线/rect=闭合区)**；**扫描件 PDF 栅格化回退(pdf2image+poppler)**；位图启发式 | 矢量 PDF 10/10、折线召回 **55/55=100%**；扫描件走 raster 回退成功 | ✅（位图/扫描件为启发式） |
 | M2 自然语言理解 | 对象/尺寸/材质/灯光/相机/画幅；只追问必要信息 | `mvp/nl_parser.py` + `schema.py` | **20 条固定意图 20/20 = 100%**（目标≥90%） | ✅ |
 | M3 脚本生成与修改 | NL→语义场景参数→受约束 Blender 操作；先校验后预览、可修复 | `cli.py`：NL→场景 JSON→校验(`schema.validate`)→受约束模板执行；`sandbox.py` 危险模式扫描 | 场景校验通过；安全扫描无危险模式；失败降级 tuck_box_std | ✅（模板受约束） |
 | M4 结构模板 | 反向插扣盒/套盒/立式包装，每类≥2 模板；折面/粘口/厚度/命名 | `mvp/packaging.py`：6 模板（tuck_box_std/hang、sleeve_std/open、pouch_standup/zipper），面板对象命名、solidify 厚度、粘口/折面 flap | 6/6 模板生成 GLB+BLEND 成功 | ✅ |
@@ -20,7 +20,7 @@
 
 | 验收项 | 标准 | 实测 | 状态 |
 |---|---|---|---|
-| 文件接入 | PNG/JPG/SVG/扁平PDF，≤50MB，90% 进入编辑态 | PNG/JPG/SVG 可接入（10/10 SVG 解析成功）；PDF 检测级 | ⚠️ 部分 |
+| 文件接入 | PNG/JPG/SVG/扁平PDF，≤50MB，90% 进入编辑态 | PNG/JPG/SVG/PDF 全部可接入；PDF 矢量 10/10 + 扫描件栅格化回退 | ✅（位图精度有限） |
 | 结构范围 | 3 类 × ≥2 模板 | 6 模板全部生成成功 | ✅ |
 | 刀模识别 | 折线召回 ≥85% | 标准样张 **44/44 = 100%**（自建 10 样张，虚线清晰） | ✅（测试集有限） |
 | 自然语言 | 20 条固定意图 ≥90% | **20/20 = 100%** | ✅ |
@@ -44,7 +44,7 @@ python scripts/mvp/cli.py --text "反向插扣盒，哑光纸，暖色晨光，4
 
 ## 4. 尚未达标 / 待验证（如实）
 
-1. **扁平 PDF 未栅格化/矢量解析**（仅签名检测）——M1 唯一硬缺口；
+1. **扫描件/位图精度有限**：矢量 PDF/SVG 折线召回 100%，但位图（含扫描件 PDF）为启发式候选，精度有限；
 2. **文字/主视觉自动识别**：当前依赖人工/AI 判读，未集成 OCR；
 3. **量化指标缺真实样本**：局部编辑 ≥80%、导出 ≥98%、素材 90% 达标率需大规模样本统计；
 4. **7 日复用率 ≥30%**：需真实试运营，无法在本地验证；
@@ -53,7 +53,8 @@ python scripts/mvp/cli.py --text "反向插扣盒，哑光纸，暖色晨光，4
 ## 5. 复核路径（可复现）
 ```
 python tests/run_mvp_tests.py                     # 意图准确率
-python tests/run_dieline_tests.py                 # 折线召回（自建样张）
+python tests/run_dieline_tests.py                 # SVG 折线召回（自建样张）
+python tests/run_pdf_tests.py                     # PDF 折线召回（矢量样张）
 blender --background --python scripts/mvp/packaging.py -- --scene-json <scene> --out <out>
 blender --background --python scripts/mvp/render_mvp.py -- --scene-json <scene> --model <glb> --outdir <dir> --quick
 python scripts/mvp/cli.py --text "..." --name demo --quick
