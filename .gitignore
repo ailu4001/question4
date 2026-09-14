@@ -8,3 +8,5 @@ Thumbs.db
 assets/relief_*.png
 output/mvp_versions/
 output/tmp_*
+output/bench_export/
+output/mvp_cli/bench_*
