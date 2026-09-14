@@ -1,0 +1,323 @@
+{
+  "local_edit": {
+    "pass": 21,
+    "total": 21,
+    "rate": 100.0,
+    "target": 80,
+    "details": [
+      {
+        "text": "把材质换成亮面覆膜",
+        "target": "材质",
+        "actual_categories": [
+          "材质"
+        ],
+        "pass": true
+      },
+      {
+        "text": "材质改成烫金",
+        "target": "材质",
+        "actual_categories": [
+          "材质"
+        ],
+        "pass": true
+      },
+      {
+        "text": "换成未涂布纸",
+        "target": "材质",
+        "actual_categories": [
+          "材质"
+        ],
+        "pass": true
+      },
+      {
+        "text": "用透明材质",
+        "target": "材质",
+        "actual_categories": [
+          "材质"
+        ],
+        "pass": true
+      },
+      {
+        "text": "灯光换成冷色蓝调",
+        "target": "灯光",
+        "actual_categories": [
+          "灯光"
+        ],
+        "pass": true
+      },
+      {
+        "text": "改成暖色晨光",
+        "target": "灯光",
+        "actual_categories": [
+          "灯光"
+        ],
+        "pass": true
+      },
+      {
+        "text": "导出 JPG 和 PNG",
+        "target": "输出",
+        "actual_categories": [
+          "输出"
+        ],
+        "pass": true
+      },
+      {
+        "text": "镜头拉近一点",
+        "target": "相机",
+        "actual_categories": [
+          "相机"
+        ],
+        "pass": true
+      },
+      {
+        "text": "改成俯视角度",
+        "target": "相机",
+        "actual_categories": [
+          "相机"
+        ],
+        "pass": true
+      },
+      {
+        "text": "用正面展示",
+        "target": "相机",
+        "actual_categories": [
+          "相机"
+        ],
+        "pass": true
+      },
+      {
+        "text": "改成 16:9",
+        "target": "输出",
+        "actual_categories": [
+          "输出"
+        ],
+        "pass": true
+      },
+      {
+        "text": "输出改成 1:1 画幅",
+        "target": "输出",
+        "actual_categories": [
+          "输出"
+        ],
+        "pass": true
+      },
+      {
+        "text": "输出 4K 分辨率",
+        "target": "输出",
+        "actual_categories": [
+          "输出"
+        ],
+        "pass": true
+      },
+      {
+        "text": "导出 GLB 和 BLEND",
+        "target": "输出",
+        "actual_categories": [
+          "输出"
+        ],
+        "pass": true
+      },
+      {
+        "text": "换成套盒",
+        "target": "结构/对象",
+        "actual_categories": [
+          "结构/对象"
+        ],
+        "pass": true
+      },
+      {
+        "text": "模板改成立式拉链袋",
+        "target": "结构/对象",
+        "actual_categories": [
+          "结构/对象"
+        ],
+        "pass": true
+      },
+      {
+        "text": "换成开窗套盒",
+        "target": "结构/对象",
+        "actual_categories": [
+          "结构/对象"
+        ],
+        "pass": true
+      },
+      {
+        "text": "改成带挂孔的插扣盒",
+        "target": "结构/对象",
+        "actual_categories": [
+          "结构/对象"
+        ],
+        "pass": true
+      },
+      {
+        "text": "尺寸改为 200x100x300 mm",
+        "target": "结构/对象",
+        "actual_categories": [
+          "结构/对象"
+        ],
+        "pass": true
+      },
+      {
+        "text": "纸厚改成 0.6mm",
+        "target": "结构/对象",
+        "actual_categories": [
+          "结构/对象"
+        ],
+        "pass": true
+      },
+      {
+        "text": "不要锁定文字和 Logo",
+        "target": "其他",
+        "actual_categories": [
+          "其他"
+        ],
+        "pass": true
+      }
+    ]
+  },
+  "export": {
+    "pass": 30,
+    "total": 30,
+    "rate": 100.0,
+    "target": 98
+  },
+  "asset_intake": {
+    "pass": 24,
+    "total": 24,
+    "rate": 100.0,
+    "target": 90,
+    "details": [
+      {
+        "file": "case_1.svg",
+        "status": "ok",
+        "pass": true
+      },
+      {
+        "file": "case_10.svg",
+        "status": "ok",
+        "pass": true
+      },
+      {
+        "file": "case_2.svg",
+        "status": "ok",
+        "pass": true
+      },
+      {
+        "file": "case_3.svg",
+        "status": "ok",
+        "pass": true
+      },
+      {
+        "file": "case_4.svg",
+        "status": "ok",
+        "pass": true
+      },
+      {
+        "file": "case_5.svg",
+        "status": "ok",
+        "pass": true
+      },
+      {
+        "file": "case_6.svg",
+        "status": "ok",
+        "pass": true
+      },
+      {
+        "file": "case_7.svg",
+        "status": "ok",
+        "pass": true
+      },
+      {
+        "file": "case_8.svg",
+        "status": "ok",
+        "pass": true
+      },
+      {
+        "file": "case_9.svg",
+        "status": "ok",
+        "pass": true
+      },
+      {
+        "file": "case_1.pdf",
+        "status": "ok(vector)",
+        "pass": true
+      },
+      {
+        "file": "case_10.pdf",
+        "status": "ok(vector)",
+        "pass": true
+      },
+      {
+        "file": "case_2.pdf",
+        "status": "ok(vector)",
+        "pass": true
+      },
+      {
+        "file": "case_3.pdf",
+        "status": "ok(vector)",
+        "pass": true
+      },
+      {
+        "file": "case_4.pdf",
+        "status": "ok(vector)",
+        "pass": true
+      },
+      {
+        "file": "case_5.pdf",
+        "status": "ok(vector)",
+        "pass": true
+      },
+      {
+        "file": "case_6.pdf",
+        "status": "ok(vector)",
+        "pass": true
+      },
+      {
+        "file": "case_7.pdf",
+        "status": "ok(vector)",
+        "pass": true
+      },
+      {
+        "file": "case_8.pdf",
+        "status": "ok(vector)",
+        "pass": true
+      },
+      {
+        "file": "case_9.pdf",
+        "status": "ok(vector)",
+        "pass": true
+      },
+      {
+        "file": "text_mainvisual.png",
+        "status": "ok(启发式)",
+        "pass": true
+      },
+      {
+        "file": "transparent_case.png",
+        "status": "ok(启发式)",
+        "pass": true
+      },
+      {
+        "file": "cad_8191871.jpg",
+        "status": "ok(启发式)",
+        "pass": true
+      },
+      {
+        "file": "cad2_kAmpQGMUEd7t9Zok.jpg",
+        "status": "ok(启发式)",
+        "pass": true
+      }
+    ]
+  },
+  "e2e": {
+    "pass": 3,
+    "total": 3,
+    "rate": 100.0,
+    "target": 80,
+    "times_sec": [
+      11.9,
+      9.2,
+      9.2
+    ]
+  }
+}

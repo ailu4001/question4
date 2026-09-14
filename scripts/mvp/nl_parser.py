@@ -68,9 +68,15 @@ def parse(text, base=None):
             notes.append("尺寸 -> %s" % dims)
 
     # --- 纸厚 ---
-    th = re.search(NUM + r"\s*mm\s*(?:白卡|纸|卡纸|厚度)|(?:纸厚|厚度)\s*" + NUM, t)
-    if th:
-        v = float(th.group(1) or th.group(2))
+    v = None
+    m1 = re.search(NUM + r"\s*mm\s*(?:白卡|纸|卡纸|厚度)", t)
+    if m1:
+        v = float(m1.group(1))
+    else:
+        m2 = re.search(r"(?:纸厚|厚度)[^0-9]{0,8}" + NUM, t)
+        if m2:
+            v = float(m2.group(1))
+    if v is not None:
         scene = merge(scene, {"structure": {"paper_thickness_mm": v}})
         notes.append("纸厚 -> %.2f mm" % v)
 
@@ -117,6 +123,9 @@ def parse(text, base=None):
     if "2k" in t or "2048" in t:
         scene = merge(scene, {"output": {"resolution": 2048}})
         notes.append("分辨率 -> 2048")
+    elif "4k" in t or "4096" in t:
+        scene = merge(scene, {"output": {"resolution": 4096}})
+        notes.append("分辨率 -> 4096")
 
     # --- 输出格式 ---
     fmts = []
@@ -130,7 +139,10 @@ def parse(text, base=None):
         notes.append("输出 -> %s" % fmts)
 
     # --- 品牌锁定 ---
-    if any(k in t for k in ("禁止改动文字", "不改文字", "锁定", "保持文字", "文字位置")):
+    if any(k in t for k in ("不锁定", "解锁", "取消锁定", "不要锁定")):
+        scene = merge(scene, {"brand": {"lock_text": False, "lock_logo": False}})
+        notes.append("品牌锁定 -> 已解除")
+    elif any(k in t for k in ("禁止改动文字", "不改文字", "锁定", "保持文字", "文字位置")):
         scene = merge(scene, {"brand": {"lock_text": True, "lock_logo": True}})
         notes.append("品牌锁定 -> 文字/Logo")
 

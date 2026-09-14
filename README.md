@@ -116,6 +116,8 @@ python scripts/make_fefco_dieline.py
 | 项目包导出（PNG/JPG/GLB/BLEND/ZIP） | `exporter.py` | 导出成功 |
 | 安全（操作白名单/路径沙箱） | `sandbox.py` | 扫描通过 |
 
+**批量指标实测**（`python tests/run_mvp_benchmark.py`）：局部编辑 **21/21=100%**（≥80%）、导出 **30/30=100%**（≥98%）、素材接入 **24/24=100%**（≥90%）、端到端 **3/3=100%**（≥80%）、首次预览 **11.9 秒**（≤3 分钟）。
+
 达标矩阵与待验证项见 [docs/mvp_compliance.md](docs/mvp_compliance.md)。
 ## 工具脚本一览
 
