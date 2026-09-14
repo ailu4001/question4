@@ -21,6 +21,7 @@ from schema import validate                         # noqa: E402
 from nl_parser import parse                          # noqa: E402
 from sandbox import scan_script_text, safe_path      # noqa: E402
 from dieline import analyze as dieline_analyze       # noqa: E402
+from vision import analyze as vision_analyze        # noqa: E402
 from diff_engine import summarize_text              # noqa: E402
 from version_store import VersionStore               # noqa: E402
 from exporter import export_package                  # noqa: E402
@@ -81,10 +82,20 @@ def main():
 
     if args.asset:
         print("=== 2) 素材接入与诊断 ===")
-        rep = dieline_analyze(safe_path(args.asset))
+        asset_path = safe_path(args.asset)
+        rep = dieline_analyze(asset_path)
         print("素材诊断:", json.dumps(rep, ensure_ascii=False))
         with open(os.path.join(outdir, args.name + ".dieline.json"), "w", encoding="utf-8") as f:
             json.dump(rep, f, ensure_ascii=False, indent=2)
+        # OCR 文字 + 主视觉 + 透明区 + 品牌锁定建议
+        vrep = vision_analyze(asset_path)
+        ocr_text = (vrep.get("ocr") or {}).get("text", "")
+        print("视觉诊断: OCR文本=%r | 主视觉=%s(占比%s) | 透明=%s | 锁定区域=%d" % (
+            ocr_text[:60], vrep["main_visual"].get("found"),
+            vrep["main_visual"].get("ratio"), vrep["transparency"].get("transparent_ratio"),
+            len(vrep.get("lock_regions", []))))
+        with open(os.path.join(outdir, args.name + ".vision.json"), "w", encoding="utf-8") as f:
+            json.dump(vrep, f, ensure_ascii=False, indent=2)
 
     print("=== 3) 生成结构（受约束模板）===")
     model = os.path.join(outdir, args.name + "_model")

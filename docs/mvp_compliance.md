@@ -7,7 +7,7 @@
 
 | 模块 | 产品方案要求 | 实现 | 实测/证据 | 状态 |
 |---|---|---|---|---|
-| M1 素材接入与诊断 | PNG/JPG/SVG/扁平PDF；识别尺寸/文字/主视觉/刀模线 | `mvp/dieline.py`：SVG 解析；**PDF 矢量解析(pdfplumber：虚线=折线/实线=切线/rect=闭合区)**；**扫描件 PDF 栅格化回退(pdf2image+poppler)**；位图启发式 | 矢量 PDF 10/10、折线召回 **55/55=100%**；扫描件走 raster 回退成功 | ✅（位图/扫描件为启发式） |
+| M1 素材接入与诊断 | PNG/JPG/SVG/扁平PDF；识别尺寸/文字/主视觉/刀模线 | `dieline.py`：SVG/PDF 矢量解析 + 扫描件栅格化 + 位图启发式；`vision.py`：**OCR 文字识别(Windows.Media.Ocr，中文) + 主视觉识别(最大连通域) + 透明区检测 + 品牌锁定区域** | PDF 折线 55/55=100%；中文 OCR 实测识别"折影折叠 Folda / 品牌名称：鹿乃 / 净含量 250g"；透明图检出 84.3%；主视觉 bbox+占比 | ✅ |
 | M2 自然语言理解 | 对象/尺寸/材质/灯光/相机/画幅；只追问必要信息 | `mvp/nl_parser.py` + `schema.py` | **20 条固定意图 20/20 = 100%**（目标≥90%） | ✅ |
 | M3 脚本生成与修改 | NL→语义场景参数→受约束 Blender 操作；先校验后预览、可修复 | `cli.py`：NL→场景 JSON→校验(`schema.validate`)→受约束模板执行；`sandbox.py` 危险模式扫描 | 场景校验通过；安全扫描无危险模式；失败降级 tuck_box_std | ✅（模板受约束） |
 | M4 结构模板 | 反向插扣盒/套盒/立式包装，每类≥2 模板；折面/粘口/厚度/命名 | `mvp/packaging.py`：6 模板（tuck_box_std/hang、sleeve_std/open、pouch_standup/zipper），面板对象命名、solidify 厚度、粘口/折面 flap | 6/6 模板生成 GLB+BLEND 成功 | ✅ |
@@ -45,7 +45,7 @@ python scripts/mvp/cli.py --text "反向插扣盒，哑光纸，暖色晨光，4
 ## 4. 尚未达标 / 待验证（如实）
 
 1. **扫描件/位图精度有限**：矢量 PDF/SVG 折线召回 100%，但位图（含扫描件 PDF）为启发式候选，精度有限；
-2. **文字/主视觉自动识别**：当前依赖人工/AI 判读，未集成 OCR；
+2. **OCR 依赖系统语言包**：使用 Windows 自带 OCR（实测支持 zh-Hans-CN），无置信度输出；换平台需替换 OCR 引擎（接口已隔离在 `vision.ocr_text`）；
 3. **量化指标缺真实样本**：局部编辑 ≥80%、导出 ≥98%、素材 90% 达标率需大规模样本统计；
 4. **7 日复用率 ≥30%**：需真实试运营，无法在本地验证；
 5. 结构模板为**展示级简化结构**（非生产级刀模精度），与产品方案"不替代专业 CAD"的边界一致。
@@ -55,6 +55,7 @@ python scripts/mvp/cli.py --text "反向插扣盒，哑光纸，暖色晨光，4
 python tests/run_mvp_tests.py                     # 意图准确率
 python tests/run_dieline_tests.py                 # SVG 折线召回（自建样张）
 python tests/run_pdf_tests.py                     # PDF 折线召回（矢量样张）
+python scripts/mvp/vision.py --input <素材> --out out.json   # OCR+主视觉+透明区诊断
 blender --background --python scripts/mvp/packaging.py -- --scene-json <scene> --out <out>
 blender --background --python scripts/mvp/render_mvp.py -- --scene-json <scene> --model <glb> --outdir <dir> --quick
 python scripts/mvp/cli.py --text "..." --name demo --quick

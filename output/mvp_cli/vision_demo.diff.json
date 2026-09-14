@@ -1,0 +1,54 @@
+{
+  "changes": [
+    {
+      "path": "camera.elevation_deg",
+      "category": "相机",
+      "before": 5,
+      "after": 30
+    },
+    {
+      "path": "camera.orbit_deg",
+      "category": "相机",
+      "before": 0,
+      "after": 45
+    },
+    {
+      "path": "camera.preset",
+      "category": "相机",
+      "before": "front",
+      "after": "three_quarter"
+    },
+    {
+      "path": "lighting.preset",
+      "category": "灯光",
+      "before": "soft_studio",
+      "after": "warm_morning"
+    },
+    {
+      "path": "material.preset",
+      "category": "材质",
+      "before": "gloss_film",
+      "after": "matte_paper"
+    },
+    {
+      "path": "output.aspect",
+      "category": "输出",
+      "before": "1:1",
+      "after": "4:5"
+    },
+    {
+      "path": "structure.template",
+      "category": "结构/对象",
+      "before": "sleeve_std",
+      "after": "pouch_standup"
+    }
+  ],
+  "summary": {
+    "相机": 3,
+    "灯光": 1,
+    "材质": 1,
+    "输出": 1,
+    "结构/对象": 1
+  },
+  "text": "[相机] camera.elevation_deg: 5 -> 30\n[相机] camera.orbit_deg: 0 -> 45\n[相机] camera.preset: front -> three_quarter\n[灯光] lighting.preset: soft_studio -> warm_morning\n[材质] material.preset: gloss_film -> matte_paper\n[输出] output.aspect: 1:1 -> 4:5\n[结构/对象] structure.template: sleeve_std -> pouch_standup"
+}
