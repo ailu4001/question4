@@ -1,0 +1,59 @@
+{
+  "changes": [
+    {
+      "path": "camera.elevation_deg",
+      "category": "相机",
+      "before": 30,
+      "after": 5
+    },
+    {
+      "path": "camera.orbit_deg",
+      "category": "相机",
+      "before": 45,
+      "after": 0
+    },
+    {
+      "path": "camera.preset",
+      "category": "相机",
+      "before": "three_quarter",
+      "after": "front"
+    },
+    {
+      "path": "lighting.preset",
+      "category": "灯光",
+      "before": "cool_blue",
+      "after": "soft_studio"
+    },
+    {
+      "path": "output.aspect",
+      "category": "输出",
+      "before": "16:9",
+      "after": "1:1"
+    },
+    {
+      "path": "output.formats",
+      "category": "输出",
+      "before": [
+        "GLB",
+        "BLEND"
+      ],
+      "after": [
+        "GLB",
+        "PACKAGE"
+      ]
+    },
+    {
+      "path": "structure.template",
+      "category": "结构/对象",
+      "before": "tuck_box_std",
+      "after": "sleeve_std"
+    }
+  ],
+  "summary": {
+    "相机": 3,
+    "灯光": 1,
+    "输出": 2,
+    "结构/对象": 1
+  },
+  "text": "[相机] camera.elevation_deg: 30 -> 5\n[相机] camera.orbit_deg: 45 -> 0\n[相机] camera.preset: three_quarter -> front\n[灯光] lighting.preset: cool_blue -> soft_studio\n[输出] output.aspect: 16:9 -> 1:1\n[输出] output.formats: ['GLB', 'BLEND'] -> ['GLB', 'PACKAGE']\n[结构/对象] structure.template: tuck_box_std -> sleeve_std"
+}

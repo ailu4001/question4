@@ -17,11 +17,11 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 sys.path.insert(0, os.path.join(ROOT, "scripts", "mvp"))
 sys.path.insert(0, os.path.join(ROOT, "scripts"))
 
-from schema import default_scene, validate          # noqa: E402
+from schema import validate                         # noqa: E402
 from nl_parser import parse                          # noqa: E402
 from sandbox import scan_script_text, safe_path      # noqa: E402
 from dieline import analyze as dieline_analyze       # noqa: E402
-from diff_engine import compare_scenes, summarize_text  # noqa: E402
+from diff_engine import summarize_text              # noqa: E402
 from version_store import VersionStore               # noqa: E402
 from exporter import export_package                  # noqa: E402
 from blender_utils import find_blender               # noqa: E402
@@ -105,14 +105,13 @@ def main():
     rextra = ["--scene-json", scene_path, "--model", model + ".glb", "--outdir", render_dir]
     if args.quick:
         rextra.append("--quick")
-    run_blender(blender, "scripts/mvp/render_mvp.py", rextra, "render")
+    if not run_blender(blender, "scripts/mvp/render_mvp.py", rextra, "render"):
+        print("[错误] 渲染失败，请查看 logs/mvp_render.log")
+        sys.exit(1)
 
     print("=== 5) Diff（相对上一版本）===")
     if prev:
         diff_out = os.path.join(outdir, args.name + ".diff.json")
-        res = compare_scenes(version.restore(version.list()[-1]) and
-                             os.path.join(version.dir, version.list()[-1], "scene.json"),
-                             scene_path, diff_out) if False else None
         from diff_engine import diff_scenes
         items, summary = diff_scenes(prev, scene)
         with open(diff_out, "w", encoding="utf-8") as f:

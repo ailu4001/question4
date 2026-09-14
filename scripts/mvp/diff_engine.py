@@ -4,7 +4,6 @@
 提供：diff_scenes(a,b) -> 变更列表 + 摘要；make_compare(before_png, after_png, out) 前后对比图。
 """
 import json
-import os
 
 
 def _walk(a, b, path=""):

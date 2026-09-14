@@ -138,7 +138,7 @@ def main():
 
     print('\n================ 汇总 ================')
     total = len(steps)
-    done = total if not fails or args.keep_going else steps.index((fails[0], None)) if False else (total - len(fails)) if fails else total
+    done = total if not fails else total - len(fails)
     print('通过 %d/%d 步' % (done, total))
     if fails:
         print('失败步骤:', ', '.join(fails))

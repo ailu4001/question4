@@ -90,8 +90,17 @@ def validate(scene):
         errs.append("未知材质预设: %s" % scene.get("material", {}).get("preset"))
     if scene.get("lighting", {}).get("preset") not in LIGHT_PRESETS:
         errs.append("未知灯光预设: %s" % scene.get("lighting", {}).get("preset"))
-    if scene.get("output", {}).get("aspect") not in ASPECTS:
-        errs.append("未知画幅: %s" % scene.get("output", {}).get("aspect"))
+    out = scene.get("output", {})
+    if out.get("aspect") not in ASPECTS:
+        errs.append("未知画幅: %s" % out.get("aspect"))
+    if out.get("resolution") not in (1024, 2048, 4096):
+        errs.append("分辨率异常: %s" % out.get("resolution"))
+    for f in out.get("formats", []):
+        if f not in ("PNG", "JPG", "GLB", "BLEND", "PACKAGE"):
+            errs.append("未知导出格式: %s" % f)
+    for v in out.get("views", []):
+        if v not in ("front", "three_quarter", "top"):
+            errs.append("未知视角: %s" % v)
     return (len(errs) == 0), errs
 
 

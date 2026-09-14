@@ -9,7 +9,7 @@ import sys
 import os
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from schema import default_scene, merge, TEMPLATES, MATERIAL_PRESETS, LIGHT_PRESETS, ASPECTS
+from schema import default_scene, merge, ASPECTS
 
 NUM = r"(\d+(?:\.\d+)?)"
 

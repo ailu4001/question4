@@ -16,14 +16,14 @@ from mathutils import Vector
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 LIGHTS = {
-    "warm_morning": {"temp": (1.0, 0.88, 0.72), "energy": 260.0, "elev": 35, "label": "暖色晨光"},
-    "soft_studio":  {"temp": (1.0, 0.98, 0.95), "energy": 300.0, "elev": 50, "label": "柔光棚拍"},
-    "cool_blue":    {"temp": (0.82, 0.90, 1.0),  "energy": 240.0, "elev": 25, "label": "冷色蓝调"},
+    "warm_morning": {"temp": (1.0, 0.88, 0.72), "energy": 60.0, "elev": 35, "label": "暖色晨光"},
+    "soft_studio":  {"temp": (1.0, 0.98, 0.95), "energy": 70.0, "elev": 50, "label": "柔光棚拍"},
+    "cool_blue":    {"temp": (0.82, 0.90, 1.0),  "energy": 55.0, "elev": 25, "label": "冷色蓝调"},
 }
 CAMS = {
     "front":         {"orbit": 0,  "elev": 5,  "label": "正面"},
     "three_quarter": {"orbit": 45, "elev": 30, "label": "45度"},
-    "top":           {"orbit": 20, "elev": 75, "label": "俯视"},
+    "top":           {"orbit": 20, "elev": 45, "label": "俯视"},
 }
 ASPECTS = {"1:1": (2048, 2048), "4:5": (2048, 2560), "16:9": (2048, 1152)}
 
@@ -59,10 +59,18 @@ def scene_bounds():
     return mn, mx, (mn + mx) / 2, (mx - mn).length / 2
 
 
+def clear_lights():
+    """切换灯光预设前清除旧灯光，避免多组灯光叠加导致过曝。"""
+    for o in list(bpy.context.scene.objects):
+        if o.type == "LIGHT":
+            bpy.data.objects.remove(o, do_unlink=True)
+
+
 def setup_light(center, radius, preset):
+    clear_lights()
     cfg = LIGHTS[preset]
     sun = bpy.data.objects.new("KeySun", bpy.data.lights.new("KeySun", type="SUN"))
-    sun.data.energy = 4.0
+    sun.data.energy = 0.8
     a = math.radians(cfg["elev"])
     sun.rotation_euler = (a, 0.1, math.radians(40))
     bpy.context.scene.collection.objects.link(sun)
@@ -76,12 +84,12 @@ def setup_light(center, radius, preset):
     bpy.context.scene.world = w
     w.use_nodes = True
     w.node_tree.nodes["Background"].inputs[0].default_value = tuple(list(cfg["temp"]) + [1])
-    w.node_tree.nodes["Background"].inputs[1].default_value = 0.25
+    w.node_tree.nodes["Background"].inputs[1].default_value = 0.10
 
 
 def place_camera(cam, center, radius, preset):
     cfg = CAMS[preset]
-    d = radius * 3.0
+    d = radius * (2.5 if preset == "top" else 3.0)   # 俯视拉近，避免地面占满画面
     o, e = math.radians(cfg["orbit"]), math.radians(cfg["elev"])
     cam.location = center + Vector((math.sin(o) * math.cos(e), -math.cos(o) * math.cos(e), math.sin(e))) * d
     cam.rotation_euler = (center - cam.location).to_track_quat("-Z", "Y").to_euler()
@@ -104,7 +112,7 @@ def main():
     bpy.ops.mesh.primitive_plane_add(size=radius * 6, location=(0, 0, ground_z))
     gm = bpy.data.materials.new("ground")
     gm.use_nodes = True
-    gm.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value = (0.55, 0.52, 0.48, 1)
+    gm.node_tree.nodes["Principled BSDF"].inputs["Base Color"].default_value = (0.12, 0.12, 0.14, 1)
     bpy.context.object.data.materials.append(gm)
 
     cam = bpy.data.objects.new("Cam", bpy.data.cameras.new("Cam"))

@@ -43,13 +43,25 @@ def parse_svg(path):
 
 def parse_bitmap(path):
     im = Image.open(path).convert("L")
-    a = np.asarray(im.resize((min(im.width, 1200), int(min(im.width, 1200) * im.height / im.width))), dtype=np.float32)
+    W = min(im.width, 1200)
+    a = np.asarray(im.resize((W, max(1, int(W * im.height / im.width)))), dtype=np.float32)
     dark = a < 200
-    rows = (dark.sum(axis=1) > dark.shape[1] * 0.25).sum()
-    cols = (dark.sum(axis=0) > dark.shape[0] * 0.25).sum()
-    # 长直线(切线候选) vs 分散线段(折线候选启发式)
-    cut = int(rows + cols)
-    crease = int(max(0, dark.sum() / max(dark.shape) - cut))
+    # 切线候选：贯穿性长直线（整行/整列暗像素占比 > 80%）
+    cut = int((dark.mean(axis=1) > 0.8).sum() + (dark.mean(axis=0) > 0.8).sum())
+    # 折线候选：短线段(连续暗像素 4~40)每采样行的中位数
+    step = max(1, dark.shape[0] // 120)
+    counts = []
+    for y in range(0, dark.shape[0], step):
+        line = dark[y]; cnt = 0; run = 0
+        for v in line:
+            if v:
+                run += 1
+            else:
+                if 4 <= run <= 40: cnt += 1
+                run = 0
+        if 4 <= run <= 40: cnt += 1
+        counts.append(cnt)
+    crease = int(round(float(np.median(counts)) if counts else 0))
     return {"format": "BITMAP", "cut_candidates": cut, "crease_candidates": crease,
             "closed_regions": 0, "status": "ok(启发式)"}
 
