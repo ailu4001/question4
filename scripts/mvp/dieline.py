@@ -24,6 +24,26 @@ def parse_svg(path):
     with open(path, encoding="utf-8", errors="ignore") as f:
         s = f.read()
     cut, crease, closed = [], [], []
+    # ① 真实刀模惯例：按分组(class/id 含 fold/crease/score 与 cut/trim/die)统计
+    grouped = False
+    legend = {}
+    for m in re.finditer(r"<g\b([^>]*)>(.*?)</g>", s, re.S | re.I):
+        attrs, body = m.group(1), m.group(2)
+        a = attrs.lower()
+        n = len(re.findall(r"<(path|line|polyline|polygon|rect)\b", body, re.I))
+        if n == 0:
+            continue
+        st = re.search(r"stroke\s*[:=]\s*[\"']?([#a-zA-Z0-9(),\. ]+)", a)
+        color = st.group(1).strip() if st else ""
+        if any(k in a for k in ("fold", "crease", "score")):
+            crease += [attrs[:60]] * n; legend["fold"] = color; grouped = True
+        elif any(k in a for k in ("cut", "trim", "die")):
+            cut += [attrs[:60]] * n; grouped = True
+            closed += [attrs[:60]] * len(re.findall(r"<rect\b", body, re.I))
+            legend["cut"] = color
+    if grouped:
+        return {"format": "SVG", "cut_candidates": len(cut), "crease_candidates": len(crease),
+                "closed_regions": len(closed), "status": "ok(grouped)", "color_legend": legend}
     for m in re.finditer(r"<(line|path|rect)\b([^>]*)>", s, re.I):
         tag, attrs = m.group(1).lower(), m.group(2)
         dashed = re.search(r"stroke-dasharray\s*[:=]\s*[\"']?\s*([0-9.,\s]+)", attrs, re.I)

@@ -38,6 +38,44 @@ def ocr_text(path, lang="zh-Hans-CN"):
         return {"available": False, "error": str(e), "text": "", "lines": []}
 
 
+def classify(img):
+    """判定素材类型：artwork(白底彩色设计稿) / dieline(线条刀模) / unknown。"""
+    a = np.asarray(img.convert("RGB"), dtype=np.float32)
+    edge = np.concatenate([a[:5].reshape(-1, 3), a[-5:].reshape(-1, 3),
+                           a[:, :5].reshape(-1, 3), a[:, -5:].reshape(-1, 3)])
+    bg = np.median(edge, axis=0)
+    white = (a > 240).all(-1)
+    fg = ~white
+    mx = a.max(-1); mn = a.min(-1)
+    sat = (mx - mn) / np.maximum(mx, 1e-6)
+    sat_fg = float(sat[fg].mean()) if fg.any() else 0.0
+    bg_white = bool((bg > 230).all())
+    if bg_white and fg.mean() < 0.80 and sat_fg > 0.15:
+        kind = "artwork"
+    elif fg.mean() < 0.25 and sat_fg < 0.15:
+        kind = "dieline"
+    else:
+        kind = "unknown"
+    return {"asset_type": kind, "background_rgb": [int(v) for v in bg],
+            "nonwhite_ratio": round(float(fg.mean()), 4),
+            "fg_saturation": round(sat_fg, 3)}
+
+
+def extract_artwork(img, out_path, white_thr=240, margin=2):
+    """裁出白底设计稿中的有效彩色区域（去掉外围白板）。"""
+    a = np.asarray(img.convert("RGB"))
+    fg = ~(a > white_thr).all(-1)
+    if not fg.any():
+        return None
+    ys, xs = np.where(fg)
+    x0 = max(0, int(xs.min()) - margin); x1 = min(a.shape[1] - 1, int(xs.max()) + margin)
+    y0 = max(0, int(ys.min()) - margin); y1 = min(a.shape[0] - 1, int(ys.max()) + margin)
+    crop = img.convert("RGB").crop((x0, y0, x1 + 1, y1 + 1))
+    os.makedirs(os.path.dirname(out_path), exist_ok=True)
+    crop.save(out_path)
+    return {"extracted": out_path, "bbox": [x0, y0, x1, y1], "size": list(crop.size)}
+
+
 def transparency(img):
     if img.mode in ("RGBA", "LA"):
         alpha = np.asarray(img.getchannel("A"))
@@ -93,8 +131,21 @@ def analyze(path, lang="zh-Hans-CN"):
         pages = convert_from_path(path, dpi=150, first_page=1, last_page=1)
         ocr_path = os.path.join(tempfile.gettempdir(), "folda_vision_page1.png")
         pages[0].save(ocr_path)
-    img = Image.open(ocr_path)
+    try:
+        img = Image.open(ocr_path)
+    except Exception as e:  # noqa: BLE001
+        return {"file": os.path.basename(path), "supported": False,
+                "reason": "该格式(%s)无法直接做像素分析，需先栅格化：%s" % (ext, e),
+                "ocr": {"available": False, "text": "", "lines": []},
+                "transparency": {"alpha_available": False, "transparent_ratio": None},
+                "main_visual": {"found": False}, "lock_regions": []}
     report = {"file": os.path.basename(path), "size": list(img.size), "source_ext": ext}
+    report["asset_class"] = classify(img)
+    if report["asset_class"]["asset_type"] == "artwork":
+        art_png = os.path.join(ROOT, "output", os.path.splitext(os.path.basename(path))[0] + "_artwork.png")
+        art = extract_artwork(img, art_png)
+        if art:
+            report["artwork"] = art
     ocr = ocr_text(ocr_path, lang)
     report["ocr"] = ocr
     report["transparency"] = transparency(img)

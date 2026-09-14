@@ -14,6 +14,7 @@ from schema import default_scene, merge, ASPECTS
 NUM = r"(\d+(?:\.\d+)?)"
 
 TEMPLATE_RULES = [
+    (("牛奶盒", "屋顶盒", "gable", "鲜奶盒"), "milk_carton"),
     (("拉链", "zip"), "pouch_zipper"),
     (("立式袋", "自立袋", "包装袋", "立式包装", "袋"), "pouch_standup"),
     (("挂孔", "吊挂", "挂卡"), "tuck_box_hang"),
@@ -25,6 +26,8 @@ TEMPLATE_RULES = [
 MATERIAL_RULES = [
     (("烫金",), "foil_gold"),
     (("烫银",), "foil_silver"),
+    (("拉丝", "brushed"), "metal_brushed"),
+    (("不锈钢", "金属", "钢"), "metal_steel"),
     (("亮面", "覆膜", "亮膜", "镜面"), "gloss_film"),
     (("透明", "PVC"), "transparent"),
     (("未涂布", "原纸"), "uncoated"),
@@ -142,7 +145,8 @@ def parse(text, base=None):
     if any(k in t for k in ("不锁定", "解锁", "取消锁定", "不要锁定")):
         scene = merge(scene, {"brand": {"lock_text": False, "lock_logo": False}})
         notes.append("品牌锁定 -> 已解除")
-    elif any(k in t for k in ("禁止改动文字", "不改文字", "锁定", "保持文字", "文字位置")):
+    elif any(k in t for k in ("禁止改动文字", "不改文字", "锁定", "保持文字", "文字位置",
+                              "维持不变", "保持不变", "原样")):
         scene = merge(scene, {"brand": {"lock_text": True, "lock_logo": True}})
         notes.append("品牌锁定 -> 文字/Logo")
 

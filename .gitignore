@@ -10,3 +10,6 @@ output/mvp_versions/
 output/tmp_*
 output/bench_export/
 output/mvp_cli/bench_*
+output/box*
+output/fold*
+output/dieline_artwork_*

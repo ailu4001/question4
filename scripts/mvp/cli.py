@@ -74,6 +74,7 @@ def main():
     hits = scan_script_text(json.dumps(scene, ensure_ascii=False))
     print("安全扫描:", "通过（无危险模式）" if not hits else hits)
 
+    vrep = None
     prev = version.restore(version.list()[-1]) if version.list() else None
     scene_path = os.path.join(outdir, args.name + ".scene.json")
     with open(scene_path, "w", encoding="utf-8") as f:
@@ -90,17 +91,33 @@ def main():
         # OCR 文字 + 主视觉 + 透明区 + 品牌锁定建议
         vrep = vision_analyze(asset_path)
         ocr_text = (vrep.get("ocr") or {}).get("text", "")
-        print("视觉诊断: OCR文本=%r | 主视觉=%s(占比%s) | 透明=%s | 锁定区域=%d" % (
-            ocr_text[:60], vrep["main_visual"].get("found"),
-            vrep["main_visual"].get("ratio"), vrep["transparency"].get("transparent_ratio"),
-            len(vrep.get("lock_regions", []))))
+        cls = vrep.get("asset_class") or {}
+        print("素材类型: %s | 背景=%s | 有效内容占比=%s | 前景饱和度=%s" % (
+            cls.get("asset_type"), cls.get("background_rgb"),
+            cls.get("nonwhite_ratio"), cls.get("fg_saturation")))
+        if vrep.get("artwork"):
+            print("设计稿提取: %s (从 %s 裁出 %s)" % (
+                os.path.basename(vrep["artwork"]["extracted"]), vrep["file"], vrep["artwork"]["size"]))
+        mv = vrep.get("main_visual") or {}
+        tp = vrep.get("transparency") or {}
+        if vrep.get("supported", True):
+            print("视觉诊断: OCR文本=%r | 主视觉=%s(占比%s) | 透明=%s | 锁定区域=%d" % (
+                ocr_text[:60], mv.get("found"), mv.get("ratio"),
+                tp.get("transparent_ratio"), len(vrep.get("lock_regions", []))))
+        else:
+            print("视觉诊断: 跳过（%s）" % vrep.get("reason", "格式不支持"))
         with open(os.path.join(outdir, args.name + ".vision.json"), "w", encoding="utf-8") as f:
             json.dump(vrep, f, ensure_ascii=False, indent=2)
 
     print("=== 3) 生成结构（受约束模板）===")
     model = os.path.join(outdir, args.name + "_model")
-    good = run_blender(blender, "scripts/mvp/packaging.py",
-                       ["--scene-json", scene_path, "--out", model], "build")
+    bargs = ["--scene-json", scene_path, "--out", model]
+    if args.asset and os.path.splitext(args.asset)[1].lower() in (".png", ".jpg", ".jpeg", ".webp", ".bmp"):
+        tex = asset_path
+        if vrep and vrep.get("artwork") and vrep["artwork"].get("extracted"):
+            tex = vrep["artwork"]["extracted"]    # 用裁掉白板的彩色设计稿
+        bargs += ["--texture", tex]               # 品牌锁定：原图内容不改写
+    good = run_blender(blender, "scripts/mvp/packaging.py", bargs, "build")
     if not good:
         print("[降级] 生成失败，回退到 tuck_box_std 模板重试")
         scene["structure"]["template"] = "tuck_box_std"

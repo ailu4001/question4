@@ -26,6 +26,8 @@ MATERIALS = {
     "foil_gold": ((0.91, 0.77, 0.42, 1), 0.25, 1.0),
     "uncoated": ((0.94, 0.92, 0.88, 1), 0.9, 0.0),
     "transparent": ((1, 1, 1, 1), 0.1, 0.0),
+    "metal_steel": ((0.79, 0.80, 0.82, 1), 0.28, 1.0),
+    "metal_brushed": ((0.71, 0.73, 0.76, 1), 0.45, 1.0),
 }
 
 
@@ -35,6 +37,7 @@ def parse_args():
     p = argparse.ArgumentParser()
     p.add_argument("--scene-json", required=True)
     p.add_argument("--out", required=True)
+    p.add_argument("--texture", help="贴图素材（png/jpg/webp），保持原图不改写")
     return p.parse_args(argv)
 
 
@@ -62,12 +65,19 @@ def make_panel(name, quad, thickness_mm):
     return obj
 
 
-def make_material(name, preset):
+def make_material(name, preset, texture_path=None):
     color, rough, metal = MATERIALS.get(preset, MATERIALS["matte_paper"])
     mat = bpy.data.materials.new(name)
     mat.use_nodes = True
     bsdf = mat.node_tree.nodes.get("Principled BSDF")
-    bsdf.inputs["Base Color"].default_value = color
+    print("  material=%s texture=%s" % (preset, texture_path or "-"))
+    if texture_path and os.path.exists(texture_path):
+        # 品牌锁定：直接使用原图作为贴图，不做任何像素改写
+        tex = mat.node_tree.nodes.new("ShaderNodeTexImage")
+        tex.image = bpy.data.images.load(texture_path)
+        mat.node_tree.links.new(tex.outputs["Color"], bsdf.inputs["Base Color"])
+    else:
+        bsdf.inputs["Base Color"].default_value = color
     bsdf.inputs["Roughness"].default_value = rough
     bsdf.inputs["Metallic"].default_value = metal
     return mat
@@ -96,6 +106,23 @@ def box_structure(W, D, H, t):
     return panels
 
 
+def milk_carton_structure(W, D, H, t):
+    """牛奶盒（屋顶盒 gable-top）：4 侧板 + 前后斜面屋顶 + 脊封口 + 底封。"""
+    w, d, h = W * MM, D * MM, H * MM
+    roof = d / 2
+    zr = h + roof
+    return [
+        ("front_panel", [(-w/2, -d/2, 0), (w/2, -d/2, 0), (w/2, -d/2, h), (-w/2, -d/2, h)]),
+        ("back_panel",  [(-w/2, d/2, 0), (w/2, d/2, 0), (w/2, d/2, h), (-w/2, d/2, h)]),
+        ("left_panel",  [(-w/2, -d/2, 0), (-w/2, d/2, 0), (-w/2, d/2, h), (-w/2, -d/2, h)]),
+        ("right_panel", [(w/2, -d/2, 0), (w/2, d/2, 0), (w/2, d/2, h), (w/2, -d/2, h)]),
+        ("roof_front", [(-w/2, -d/2, h), (w/2, -d/2, h), (w/2, 0, zr), (-w/2, 0, zr)]),
+        ("roof_back",  [(-w/2, d/2, h), (w/2, d/2, h), (w/2, 0, zr), (-w/2, 0, zr)]),
+        ("roof_ridge", [(-w/2, -0.004, zr), (w/2, -0.004, zr), (w/2, 0.004, zr), (-w/2, 0.004, zr)]),
+        ("bottom_seal", [(-w/2, -d/2, 0), (w/2, -d/2, 0), (w/2, d/2, 0), (-w/2, d/2, 0)]),
+    ]
+
+
 def sleeve_structure(W, D, H, t):
     w, d, h = W * MM, D * MM, H * MM
     return [
@@ -122,6 +149,8 @@ def pouch_structure(W, D, H, t):
 
 
 def build_structure(template, W, D, H, t):
+    if template == "milk_carton":
+        return milk_carton_structure(W, D, H, t)
     if template.startswith("tuck_box"):
         return box_structure(W, D, H, t)
     if template.startswith("sleeve"):
@@ -158,7 +187,8 @@ def main():
     t = st.get("paper_thickness_mm", 0.45)
     template = st["template"]
 
-    mat = make_material("mat_" + scene["material"]["preset"], scene["material"]["preset"])
+    mat = make_material("mat_" + scene["material"]["preset"], scene["material"]["preset"],
+                        getattr(args, "texture", None))
     objs = []
     for name, quad in build_structure(template, W, D, H, t):
         o = make_panel(name, quad, t)

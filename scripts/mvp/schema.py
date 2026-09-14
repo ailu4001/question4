@@ -8,6 +8,7 @@ from copy import deepcopy
 
 TEMPLATES = {
     # M4 结构模板：3 类 × 2 变体（尺寸为 mm）
+    "milk_carton":      {"class": "牛奶盒", "variant": "屋顶盒(gable-top)", "dims": ["width", "depth", "height"]},
     "tuck_box_std":     {"class": "反向插扣盒", "variant": "标准", "dims": ["width", "depth", "height"]},
     "tuck_box_hang":    {"class": "反向插扣盒", "variant": "带挂孔", "dims": ["width", "depth", "height"]},
     "sleeve_std":       {"class": "套盒/卡套", "variant": "标准", "dims": ["width", "depth", "height"]},
@@ -23,6 +24,8 @@ MATERIAL_PRESETS = {
     "foil_gold":    {"base_color": "#E8C56A", "roughness": 0.25, "metallic": 1.0, "label": "烫金"},
     "uncoated":     {"base_color": "#EFEAE0", "roughness": 0.9,  "metallic": 0.0, "label": "未涂布"},
     "transparent":  {"base_color": "#FFFFFF", "roughness": 0.1,  "metallic": 0.0, "label": "透明"},
+    "metal_steel":  {"base_color": "#C9CDD2", "roughness": 0.28, "metallic": 1.0, "label": "不锈钢"},
+    "metal_brushed":{"base_color": "#B6BBC1", "roughness": 0.45, "metallic": 1.0, "label": "拉丝金属"},
 }
 
 LIGHT_PRESETS = {
