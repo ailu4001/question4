@@ -1,0 +1,49 @@
+{
+  "version": "v1",
+  "structure": {
+    "template": "tuck_box_std",
+    "dimensions_mm": {
+      "width": 180.0,
+      "depth": 60.0,
+      "height": 260.0
+    },
+    "paper_thickness_mm": 0.45,
+    "show_creases": true,
+    "show_glue_tab": true,
+    "object_naming": true
+  },
+  "material": {
+    "preset": "matte_paper",
+    "brand_color": null
+  },
+  "brand": {
+    "lock_text": true,
+    "lock_logo": true,
+    "texture": null
+  },
+  "lighting": {
+    "preset": "soft_studio"
+  },
+  "camera": {
+    "preset": "three_quarter",
+    "orbit_deg": 45,
+    "elevation_deg": 30,
+    "zoom": 1.0
+  },
+  "output": {
+    "aspect": "4:5",
+    "resolution": 2048,
+    "formats": [
+      "PNG",
+      "JPG",
+      "GLB",
+      "BLEND",
+      "PACKAGE"
+    ],
+    "views": [
+      "front",
+      "three_quarter",
+      "top"
+    ]
+  }
+}

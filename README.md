@@ -100,6 +100,22 @@ python scripts/make_fefco_dieline.py
 | 使用说明 | `docs/usage.md` |
 | 开发日志与日程记录 | `logs/dev_log.md`、`logs/schedule.md` |
 
+## 产品 MVP（折影 Folda，对照产品方案）
+
+端到端：`python scripts/mvp/cli.py --text "<一句话>" --asset <素材> --name demo --quick`
+
+| 能力 | 实现 | 实测 |
+|---|---|---|
+| 自然语言理解（对象/尺寸/材质/灯光/相机/画幅） | `scripts/mvp/nl_parser.py` + `schema.py` | 20 条固定意图 **100%**（≥90%） |
+| 6 个结构模板（插扣盒/套盒/立式袋 ×2） | `scripts/mvp/packaging.py` | 6/6 生成成功 |
+| 刀模/素材接入（SVG/位图/PDF 检测） | `scripts/mvp/dieline.py` | 折线召回 44/44 = 100%（标准样张） |
+| UV 越界检查 + 材质预设 | `packaging.py` uv_check | 越界 **0%**（≤5%） |
+| 局部编辑 Diff + 版本 | `diff_engine.py` + `version_store.py` | 4 项分类变更；版本递增 |
+| 渲染预设（3 灯光×3 镜头、2K、多画幅） | `render_mvp.py` | 2048×2560 单张 ~10 秒 |
+| 项目包导出（PNG/JPG/GLB/BLEND/ZIP） | `exporter.py` | 导出成功 |
+| 安全（操作白名单/路径沙箱） | `sandbox.py` | 扫描通过 |
+
+达标矩阵与待验证项见 [docs/mvp_compliance.md](docs/mvp_compliance.md)。
 ## 工具脚本一览
 
 | 脚本 | 职责 |

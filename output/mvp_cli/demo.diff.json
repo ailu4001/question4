@@ -1,0 +1,40 @@
+{
+  "changes": [
+    {
+      "path": "lighting.preset",
+      "category": "灯光",
+      "before": "warm_morning",
+      "after": "cool_blue"
+    },
+    {
+      "path": "material.preset",
+      "category": "材质",
+      "before": "matte_paper",
+      "after": "gloss_film"
+    },
+    {
+      "path": "output.aspect",
+      "category": "输出",
+      "before": "4:5",
+      "after": "16:9"
+    },
+    {
+      "path": "output.formats",
+      "category": "输出",
+      "before": [
+        "GLB",
+        "PACKAGE"
+      ],
+      "after": [
+        "GLB",
+        "BLEND"
+      ]
+    }
+  ],
+  "summary": {
+    "灯光": 1,
+    "材质": 1,
+    "输出": 2
+  },
+  "text": "[灯光] lighting.preset: warm_morning -> cool_blue\n[材质] material.preset: matte_paper -> gloss_film\n[输出] output.aspect: 4:5 -> 16:9\n[输出] output.formats: ['GLB', 'PACKAGE'] -> ['GLB', 'BLEND']"
+}

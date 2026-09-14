@@ -1,0 +1,22 @@
+[
+  {"text": "做成立式袋，哑光纸，暖色晨光，45 度俯视，4:5", "expect": {"structure": {"template": "pouch_standup"}, "material": {"preset": "matte_paper"}, "lighting": {"preset": "warm_morning"}, "camera": {"preset": "three_quarter"}, "output": {"aspect": "4:5"}}},
+  {"text": "按刀模生成反向插扣盒，300g 未涂布，正面展示", "expect": {"structure": {"template": "tuck_box_std"}, "material": {"preset": "uncoated"}, "camera": {"preset": "front"}}},
+  {"text": "做成立式拉链袋，亮面覆膜，冷色蓝调", "expect": {"structure": {"template": "pouch_zipper"}, "material": {"preset": "gloss_film"}, "lighting": {"preset": "cool_blue"}}},
+  {"text": "插扣盒加挂孔，烫银，柔光棚拍", "expect": {"structure": {"template": "tuck_box_hang"}, "material": {"preset": "foil_silver"}, "lighting": {"preset": "soft_studio"}}},
+  {"text": "做一个卡套，烫金，45度斜视", "expect": {"structure": {"template": "sleeve_std"}, "material": {"preset": "foil_gold"}, "camera": {"preset": "three_quarter"}}},
+  {"text": "开窗套盒，哑膜，暖光", "expect": {"structure": {"template": "sleeve_open"}, "material": {"preset": "matte_paper"}, "lighting": {"preset": "warm_morning"}}},
+  {"text": "立式包装，透明材质，冷光，16:9", "expect": {"structure": {"template": "pouch_standup"}, "material": {"preset": "transparent"}, "lighting": {"preset": "cool_blue"}, "output": {"aspect": "16:9"}}},
+  {"text": "纸盒宽 180 高 260 底宽 60，哑光纸", "expect": {"structure": {"template": "tuck_box_std", "dimensions_mm": {"width": 180.0, "height": 260.0, "depth": 60.0}}, "material": {"preset": "matte_paper"}}},
+  {"text": "做成盒子 200x100x300 mm", "expect": {"structure": {"template": "tuck_box_std", "dimensions_mm": {"width": 200.0, "depth": 100.0, "height": 300.0}}}},
+  {"text": "套盒 150x40x200，亮面覆膜", "expect": {"structure": {"template": "sleeve_std", "dimensions_mm": {"width": 150.0, "depth": 40.0, "height": 200.0}}, "material": {"preset": "gloss_film"}}},
+  {"text": "立式袋 120x70x220 mm，未涂布", "expect": {"structure": {"template": "pouch_standup", "dimensions_mm": {"width": 120.0, "depth": 70.0, "height": 220.0}}, "material": {"preset": "uncoated"}}},
+  {"text": "镜头拉近，正面展示，暖色晨光", "expect": {"camera": {"preset": "front", "zoom": 1.3}, "lighting": {"preset": "warm_morning"}}},
+  {"text": "俯视角度，2K 输出，导出 GLB 和 BLEND", "expect": {"camera": {"preset": "top"}, "output": {"resolution": 2048, "formats": ["GLB", "BLEND"]}}},
+  {"text": "禁止改动文字位置，锁定 Logo", "expect": {"brand": {"lock_text": true, "lock_logo": true}}},
+  {"text": "反向插扣盒，0.45mm 白卡，柔光棚拍", "expect": {"structure": {"template": "tuck_box_std", "paper_thickness_mm": 0.45}, "lighting": {"preset": "soft_studio"}}},
+  {"text": "拉链自立袋，烫金，45度，1:1", "expect": {"structure": {"template": "pouch_zipper"}, "material": {"preset": "foil_gold"}, "camera": {"preset": "three_quarter"}, "output": {"aspect": "1:1"}}},
+  {"text": "卡套，透明，俯视", "expect": {"structure": {"template": "sleeve_std"}, "material": {"preset": "transparent"}, "camera": {"preset": "top"}}},
+  {"text": "挂卡纸盒，亮膜，冷色，16:9，导出项目包", "expect": {"structure": {"template": "tuck_box_hang"}, "material": {"preset": "gloss_film"}, "lighting": {"preset": "cool_blue"}, "output": {"aspect": "16:9"}}},
+  {"text": "做一个盒子 300x200x150，未涂布，暖光", "expect": {"structure": {"template": "tuck_box_std", "dimensions_mm": {"width": 300.0, "depth": 200.0, "height": 150.0}}, "material": {"preset": "uncoated"}, "lighting": {"preset": "warm_morning"}}},
+  {"text": "立式袋加开窗套盒双方案，哑光纸，柔光", "expect": {"structure": {"template": "pouch_standup"}, "material": {"preset": "matte_paper"}, "lighting": {"preset": "soft_studio"}}}
+]
