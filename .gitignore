@@ -7,3 +7,4 @@ Thumbs.db
 *.blend1
 assets/relief_*.png
 output/mvp_versions/
+output/tmp_*
